@@ -59,7 +59,7 @@ def api_get_customerpoints():
 def api_get_reviews():
     conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
                              "Davi_Nails")
-    sql = "SELECT * FROM reviews ORDER BY rev_date DESC"
+    sql = "SELECT ci.first_name, ci.last_name, rev.rev_date, rev.rev_description, rev.rev_rating FROM customer_information AS ci inner join reviews AS rev ON ci.cust_id = rev.cust_id order by rev.rev_date DESC;"
     printlogs = execute_read_query(conn, sql)
 
     return jsonify(printlogs)  # Prints all logs
