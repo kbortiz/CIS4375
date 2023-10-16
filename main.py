@@ -113,6 +113,18 @@ def post_create_promo():
     execute_query(conn, addreview)  # executes above query to add the provided data to table
     return 'Promotion Added'
 
+@app.route('/updatepromo', methods=['PUT'])  # endpoint to unassign a car
+def put_updatepromo():
+    conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
+                             "Davi_Nails")
 
+    request_data = request.get_json()
+    newstatus = request_data['promo_status']
+    id_num = request_data['promo_id']
+
+
+    changestatus = "UPDATE promotions SET promo_status = UPPER('%s') WHERE promo_id = '%s'" % (newstatus, id_num)
+    execute_query(conn, changestatus)  # executes above query to set given mechanics currentcar to NULL
+    return 'PUT REQUEST WORKED'
 
 app.run()
