@@ -1,0 +1,14 @@
+<script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+
+<div class="sidebar">
+    <h2>Menu</h2>
+    <ul>
+        <li class="<%= currentUrl === '/' ? 'active' : '' %>"><a href="/">Check-In</a></li>
+        <li class="<%= currentUrl === '/reward' ? 'active' : '' %>"><a href="/reward">Reward</a></li>
+        <li class="<%= currentUrl === '/promotion' ? 'active' : '' %>"><a href="/promotion">Promotion</a></li>
+        <li class="<%= currentUrl === '/redemption-history' ? 'active' : '' %>"><a href="/redemption-history">Redemption History</a></li>
+    </ul>
+    <ul>
+        <li class="bottom-link <%= currentUrl === '/login' ? 'active' : '' %>"><a href="/login">Log In</a></li>
+    </ul>
+</div>
