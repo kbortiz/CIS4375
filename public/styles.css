@@ -50,29 +50,23 @@ body{
 }
 
 .wrapper .sidebar ul li:hover{
-  background-color: #7d67e9;
+  background-color: #a795ff;
 }
     
 .wrapper .sidebar ul li:hover a{
   color: #fff;
 }
- 
-.wrapper .sidebar .social_media{
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-}
+
 
 .wrapper .sidebar ul li.active {
-    background-color: #ffffff; /* Highlight color for the active item */
+    background-color: #f3f5f9; /* Highlight color for the active item */
     color: #000000; /* Text color for the active item */
 }
 
 .wrapper .sidebar .bottom-link {
   position: absolute;
   bottom: 0;
+  width: 100%;
 }
 
 .wrapper .main_content{
