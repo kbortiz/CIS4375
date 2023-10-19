@@ -113,6 +113,16 @@ def post_create_promo():
     execute_query(conn, addreview)  # executes above query to add the provided data to table
     return 'Promotion Added'
 
+@app.route('/deletereview', methods=['DELETE'])  # endpoint to delete a review
+def delete_review():
+    conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
+                             "Davi_Nails")
+
+    request_data = request.get_json()  # provids json inputs for the needed data to be deleted
+    customerphone = request_data['phone_number']
+    del_id = "DELETE FROM reviews WHERE phone_number = '%s'" % (customerphone)
+    execute_read_query(conn, del_id)  # executes above query to delete data from the table
+    return 'Review Removed!'
 
 
 app.run()
