@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Customer Check-In</title>
+
+    <!-- Link to Bootstrap CSS (CDN) -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- Link to Material Design CSS (CDN) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">Customer Check-In</div>
+                    <div class="card-body">
+                        <form action="/checkin" method="POST">
+                            <!-- Material Design Text Input -->
+                            <div class="input-field">
+                                <input type="text" id="name" name="name" required>
+                                <label for="name">Name</label>
+                            </div>
+                            <!-- Material Design Date Input -->
+                            <div class="input-field">
+                                <input type="text" id="birthday" name="birthday" class="datepicker" required>
+                                <label for="birthday">Birthday</label>
+                            </div>
+                            <!-- Bootstrap Submit Button -->
+                            <button type="submit" class="btn btn-primary">Check-In</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Link to Bootstrap JavaScript (CDN) -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Link to Material Design JavaScript (CDN) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <!-- Initialize the Material Design Datepicker -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('.datepicker');
+            var options = {
+                format: 'yyyy-mm-dd' // Customize the date format
+            };
+            M.Datepicker.init(elems, options);
+        });
+    </script>
+</body>
+</html>
