@@ -2,6 +2,9 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
+const axios = require('axios');
+const { response } = require('express');
+
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(express.static(__dirname));
@@ -17,16 +20,12 @@ app.get('/', (req, res) => {
 });
 
 app.get('/reward', (req, res) => {
-    const customers = [
-        {
-            firstName: 'Kim',
-            lastName: 'Luong',
-            phoneNumber: '281-912-7693',
-            currentPoints: 10,
-            lifetimePoints: 50
-        },
-    ];
-    res.render('reward', { customers });
+
+   axios.get(`http://127.0.0.1:5000/customerpoints`)
+   .then((rewardresponse) => {
+    var customers = rewardresponse.data;
+    res.render('reward', { customers:customers});
+    });
 });
 
 app.listen(port, () => {

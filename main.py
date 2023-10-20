@@ -68,7 +68,7 @@ def api_get_reviews():
 def api_get_activepromos():
     conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
                              "Davi_Nails")
-    sql = "SELECT * FROM promotions WHERE promo_status = 'Active' ORDER BY promo_cost"
+    sql = "SELECT * FROM promotions WHERE promo_status = 'ACTIVE' ORDER BY promo_cost"
     printlogs = execute_read_query(conn, sql)
 
     return jsonify(printlogs)  # Prints all logs
