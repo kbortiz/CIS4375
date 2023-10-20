@@ -4,6 +4,7 @@ const port = 3000;
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
+app.use(express.static(__dirname));
 
 // Define a middleware to set the currentUrl for all routes
 app.use((req, res, next) => {
@@ -16,7 +17,16 @@ app.get('/', (req, res) => {
 });
 
 app.get('/reward', (req, res) => {
-    res.render('reward');
+    const customers = [
+        {
+            firstName: 'Kim',
+            lastName: 'Luong',
+            phoneNumber: '281-912-7693',
+            currentPoints: 10,
+            lifetimePoints: 50
+        },
+    ];
+    res.render('reward', { customers });
 });
 
 app.listen(port, () => {
