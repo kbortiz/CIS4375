@@ -21,12 +21,28 @@ app.get('/', (req, res) => {
 app.get('/reward', (req, res) => {
     const customers = [
         {
+            firstName: 'Peter',
+            lastName: 'Parks',
+            phoneNumber: '8321121113',
+            lastVisit: '10/10/2023',
+            currentPoints: 2,
+            lifetimePoints: 5
+        },
+        {
             firstName: 'Kim',
             lastName: 'Luong',
             phoneNumber: '2819127693',
             lastVisit: '10/20/2023',
             currentPoints: 10,
             lifetimePoints: 50
+        },
+        {
+            firstName: 'Willy',
+            lastName: 'Lanka',
+            phoneNumber: '2819225555',
+            lastVisit: '10/2/2023',
+            currentPoints: 4,
+            lifetimePoints: 4
         },
     ];
     res.render('reward', { customers });
