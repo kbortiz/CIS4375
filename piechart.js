@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function() {
   
     ctx.canvas.style.padding = '20px'; 
    
-    var customerCounts = [2, 20, 60, 5]; // Replace with actual customer counts from database
+    var customerCounts = [20, 40, 100, 5]; // Replace with actual customer counts from database
   
     // Calculate the total customer count by summing up the customer counts
     var totalCustomers = customerCounts.reduce((acc, count) => acc + count, 0);
