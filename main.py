@@ -37,6 +37,16 @@ def api_get_customers():
 
     return jsonify(printlogs)  # Prints all logs
 
+@app.route('/customercount', methods=['GET'])  # Endpoint to return all customers
+def api_get_customercount():
+    conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
+                             "Davi_Nails")
+    sql = "SELECT COUNT(*) FROM customer_information"
+    printlogs = execute_read_query(conn, sql)
+
+    return jsonify(printlogs)  # Prints all logs
+
+
 @app.route('/customerinfo', methods=['GET'])  # Endpoint to return all customers
 def api_get_customerinfo():
     conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
@@ -50,7 +60,7 @@ def api_get_customerinfo():
 def api_get_customerpoints():
     conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
                              "Davi_Nails")
-    sql = "SELECT ci.phone_number, ci.last_name, ci.first_name, cpo.current_points, cpo.lifetime_points  FROM customer_information AS ci inner join customer_points AS cpo ON ci.cust_id = cpo.cust_id  order by ci.last_name;"
+    sql = "SELECT ci.phone_number, ci.last_name, ci.first_name, cpo.current_points, cpo.lifetime_points, (select DATE_FORMAT(chk.ci_date, '%m-%d-%Y') FROM check_ins AS chk where ci.cust_id = chk.cust_id order by chk.ci_date DESC LIMIT 1) as'ci_date'  FROM customer_information AS ci inner join customer_points AS cpo ON ci.cust_id = cpo.cust_id  order by ci.last_name;"
     printlogs = execute_read_query(conn, sql)
 
     return jsonify(printlogs)  # Prints all logs
@@ -113,6 +123,8 @@ def post_create_promo():
     execute_query(conn, addreview)  # executes above query to add the provided data to table
     return 'Promotion Added'
 
+
+
 @app.route('/updatepromo', methods=['PUT'])  # endpoint to unassign a car
 def put_updatepromo():
     conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
@@ -122,6 +134,21 @@ def put_updatepromo():
     newstatus = request_data['promo_status']
     id_num = request_data['promo_id']
 
+  ##  cursor = conn cursor = conn.cursor(dictionary=True)
+ #       try:
+ #       cursor.execute('SELECT * FROM promotions WHERE promo_status = "ACTIVE"')
+ #       active = cursor.fetchone()
+ #       if active:
+ #           cursor.execute('SELECT * FROM promotions WHERE promo_id = %s'%(id_num))
+            
+ #       else:
+ #           changestatus = "UPDATE promotions SET promo_status = UPPER('%s') WHERE promo_id = '%s'" % (newstatus, id_num)
+ #           execute_query(conn, changestatus)  # executes above query to set given mechanics currentcar to NULL
+  #  except mysql.connector.Error as err:
+  #      return jsonify({"status": "fail", "message": f"Error: {err}"})
+ #   finally:
+ #       cursor.close()
+  #      conn.close()
 
     changestatus = "UPDATE promotions SET promo_status = UPPER('%s') WHERE promo_id = '%s'" % (newstatus, id_num)
     execute_query(conn, changestatus)  # executes above query to set given mechanics currentcar to NULL
