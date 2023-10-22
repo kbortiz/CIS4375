@@ -12,16 +12,19 @@ app.use((req, res, next) => {
     next();
 });
 
+
 app.get('/', (req, res) => {
     res.render('check-in');
 });
+
 
 app.get('/reward', (req, res) => {
     const customers = [
         {
             firstName: 'Kim',
             lastName: 'Luong',
-            phoneNumber: '281-912-7693',
+            phoneNumber: '2819127693',
+            lastVisit: '10/20/2023',
             currentPoints: 10,
             lifetimePoints: 50
         },

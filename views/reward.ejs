@@ -3,7 +3,7 @@
 <head>
     <title>Reward</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" type="text/css" href="/styles.css">
 </head>
 <body>
@@ -17,26 +17,17 @@
                         <h2>Total Customers: <span id="totalCustomers">???</span></h2>
                     </div>
                     <div id="doughnut-chart-container">
-                        <canvas id="customerDoughnutChart"></canvas>
+                        <canvas></canvas>
                     </div>
                 </div>
-                <div class="filter">
-                    <label for="filter">Filter by Lifetime Points:</label>
-                    <select id="filter">
-                        <option value="all">All</option>
-                        <option value="1-2">1-2</option>
-                        <option value="2-5">2-5</option>
-                        <option value="5-10">5-10</option>
-                        <!-- Add more filter options as needed -->
-                    </select>
-                </div>
                 <div><h3>Customer Reward Information</h3></div>
-                <table>
+                <table class="content-table">
                     <thead>
                         <tr>
                             <th>First Name</th>
                             <th>Last Name</th>
                             <th>Phone Number</th>
+                            <th>Last Visited Date</th>
                             <th>Current Points</th>
                             <th>Lifetime Points</th>
                         </tr>
@@ -47,6 +38,7 @@
                                 <td><%= customer.firstName %></td>
                                 <td><%= customer.lastName %></td>
                                 <td><%= customer.phoneNumber %></td>
+                                <td><%= customer.lastVisit %></td>
                                 <td><%= customer.currentPoints %></td>
                                 <td><%= customer.lifetimePoints %></td>
                             </tr>
