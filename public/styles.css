@@ -20,7 +20,7 @@ body{
 }
 
 .wrapper .sidebar{
-  width: 200px;
+  width: 14%;
   height: 100%;
   background: #69f9da;
   padding: 30px 0px;
@@ -72,7 +72,8 @@ body{
 
 .wrapper .main_content{
   width: 100%;
-  margin-left: 200px;
+  margin-left: 16%;
+  margin-right: 2%;
 }
 
 .wrapper .main_content .header{
@@ -132,7 +133,7 @@ body{
 }
 /* Adding pie chart styles*/
 
-.pie-chart-container {
+.chart-container {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -142,14 +143,21 @@ body{
 }
 
 #doughnut-chart-container {
-  width: 60%; /* 35% of the container width */
-  height: auto; /* Auto height to maintain aspect ratio */
+  display:inline-block;
+  width:60%;
+  height: auto; 
   text-align: center; /* Center the chart in the container */
-  padding-right: 25%;
+  padding-right: 15%;
+}
+@media only screen and (max-width: 768px) {
+  #doughnut-chart-container {
+    width: 90%; /* 35% of the container width */
+    height: auto; 
+  }
 }
 
 .customer-total {
-  width: 40%; /* 65% of the pie-chart container width */
+  width: 40%;
   text-align: left;
   display: flex;
   align-items: left;

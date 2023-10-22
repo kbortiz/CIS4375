@@ -68,6 +68,7 @@ document.addEventListener("DOMContentLoaded", function() {
   
     // Create the Doughnut chart
     var myDoughnutChart = new Chart(ctx, {
+      maintainAspectRatio: false,
       type: 'doughnut',
       data: chartData,
       options: options,
