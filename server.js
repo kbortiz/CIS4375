@@ -58,25 +58,25 @@ app.get('/redemption-history', (req, res) => {
             firstName: 'Peter',
             lastName: 'Parks',
             phoneNumber: '8321121113',
-            lastVisit: '10/10/2023',
-            currentPoints: 3,
-            lifetimePoints: 5
+            redemptionDate: '10/10/2023',
+            pointsUsed: 3,
+            currentPoints: 5
         },
         {
             firstName: 'Kim',
             lastName: 'Luong',
             phoneNumber: '2819127693',
-            lastVisit: '10/20/2023',
-            currentPoints: 10,
-            lifetimePoints: 50
+            redemptionDate: '10/20/2023',
+            pointsUsed: 10,
+            currentPoints: 50
         },
         {
             firstName: 'Willy',
             lastName: 'Lanka',
             phoneNumber: '2819225555',
-            lastVisit: '10/2/2023',
-            currentPoints: 4,
-            lifetimePoints: 4
+            redemptionDate: '10/2/2023',
+            pointsUsed: 4,
+            currentPoints: 4
         },
     ];
     res.render('redemption-history', { customers });

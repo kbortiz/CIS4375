@@ -8,6 +8,11 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" type="text/css" href="/styles.css">
+
+    <script src="/piechart.js"></script>
+    <script src="/search_box.js"></script>
+ 
+
 </head>
 <body>
     <div class="wrapper">
@@ -64,28 +69,28 @@
     </div>
     <script>
         // Add an event listener to the "Current Points" cells for editing
-        document.querySelectorAll('.content-table tbody tr td:nth-child(5)').forEach(function (cell) {
-            cell.addEventListener('click', function (e) {
-                cell.setAttribute('contentEditable', true);
-                cell.focus();
-            });
+    document.querySelectorAll('.content-table tbody tr td:nth-child(5)').forEach(function (cell) {
+        cell.addEventListener('click', function (e) {
+            cell.setAttribute('contentEditable', true);
+            cell.focus();
+        });
         });
     
         // Add an event listener to save edited "Current Points" data
-        document.querySelectorAll('.content-table tbody tr td:nth-child(5)').forEach(function (cell) {
-            cell.addEventListener('blur', function (e) {
-                cell.setAttribute('contentEditable', false);
-            });
+    document.querySelectorAll('.content-table tbody tr td:nth-child(5)').forEach(function (cell) {
+        cell.addEventListener('blur', function (e) {
+            cell.setAttribute('contentEditable', false);
         });
-        var categories = [
-            { name: 'New', minPoints: 1, maxPoints: 2 },
-            { name: 'At Risk', minPoints: 3, maxPoints: 4 },
-            { name: 'Regular', minPoints: 5, maxPoints: 20 },
-            { name: 'V.I.P', minPoints: 21, maxPoints: Infinity }
-        ];
-    
+    });
+    var categories = [
+        { name: 'New', minPoints: 1, maxPoints: 2 },
+        { name: 'At Risk', minPoints: 3, maxPoints: 4 },
+        { name: 'Regular', minPoints: 5, maxPoints: 20 },
+        { name: 'V.I.P', minPoints: 21, maxPoints: Infinity }
+    ];
+
     </script>
-      <script src="/piechart.js"></script>
-      <script src="/search_box.js"></script>
+
+
 </body>
 </html>
