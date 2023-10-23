@@ -13,13 +13,14 @@ body{
    background-color: #f3f5f9;
 }
 
+/* wrapper style */
 .wrapper{
   display: flex;
   position: relative;
 }
 
 .wrapper .sidebar{
-  width: 200px;
+  width: 14%;
   height: 100%;
   background: #69f9da;
   padding: 30px 0px;
@@ -71,7 +72,8 @@ body{
 
 .wrapper .main_content{
   width: 100%;
-  margin-left: 200px;
+  margin-left: 16%;
+  margin-right: 2%;
 }
 
 .wrapper .main_content .header{
@@ -89,4 +91,81 @@ body{
 
 .wrapper .main_content .info div{
   margin-bottom: 20px;
+}
+
+/* chart and table style */
+.content-table {
+  border-collapse: collapse;
+  font-size: 0.9em;
+  min-width: 100%;
+  border-radius: 5px 5px 0 0;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.content-table thead tr {
+  background-color: #69f9da;
+  color: #000000;
+  text-align: left;
+  font-weight: bold;
+}
+
+.content-table th,
+.content-table td {
+  padding: 12px 15px;
+}
+
+.content-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.content-table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+.content-table tbody tr:last-of-type {
+  border-bottom: 2px solid #009879;
+}
+
+.content-table tbody tr.active-row {
+  font-weight: bold;
+  color: #009879;
+}
+/* Adding pie chart styles*/
+
+.chart-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
+}
+
+#doughnut-chart-container {
+  display:inline-block;
+  width:60%;
+  height: auto; 
+  text-align: center; /* Center the chart in the container */
+  padding-right: 15%;
+}
+@media only screen and (max-width: 768px) {
+  #doughnut-chart-container {
+    width: 90%; /* 35% of the container width */
+    height: auto; 
+  }
+}
+
+.customer-total {
+  width: 40%;
+  text-align: left;
+  display: flex;
+  align-items: left;
+  justify-content: left;
+  padding-left: 10%;
+}
+
+#totalCustomers {
+  font-weight: bold;
+  color: #000000;
 }
