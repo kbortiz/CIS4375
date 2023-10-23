@@ -7,36 +7,106 @@
 <style>
     .button {
         float: right;
+        padding: 15px 15px;
+        background-color: #69f9da;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        color: black;
+        text-decoration: none;
+    }
+    .button:hover {
+        text-decoration: none;
+        background-color: #a795ff;
+        color: white;
+    }
+    .a:visited {
+        text-decoration: none;
+        color: black;
+    }
+    .headerbox {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .headerblock1 {
+        width: 80%;
+        box-sizing: border-box;
+    }
+    .headerblock2 {
+        width: 20%;
+        box-sizing: border-box;
+    }
+    div.container {
+        text-align: center;
+        display: block;
+    }
+    div.info {
+        margin: auto;
+        width: 60%;
+        background-color: white;
+        padding: 50px;
+        display: inline-block;
+        float: none;
+        box-shadow: 3px 3px 8px #888888;
     }
 </style>
 <body>
 <div class="wrapper">
     <%- include('partials/sidebar') %>
     <div class="main_content">
-        <div class="header" style="text-transform: uppercase;">
-            <h1>Reviews</h1>
-            <button class="button">Edit Reviews</button>
+        <div class="header">
+            <div class="headerbox" style="text-transform: uppercase;">
+                <h2 class="headerblock1">Customer Reviews</h2>
+                <div class="headerblock2">
+                    <button class="button" onclick="location.href='http://localhost:3000/delete-reviews'">Delete Reviews</button>
+                </div>
+            </div>
         </div>
-        <div class="info" style="padding: 50px">
-            <div>
-                <p><i class="fas fa-user"></i> Joseph Nguyen</p>
-                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                <p>October 16, 2023</p>
-                <!-- Your content here -->
+        <div class="container">
+
+            <div class="info">
+                <h1>Average Rating: 4.67 <i class="fas fa-star"></i></h1>
             </div>
-            <div>
-                <p>This is why I like the nail salon.</p>
+
+            <div class="info">
+                <div>
+                    <p><i class="fas fa-user"></i>  Joseph Nguyen</p>
+                    
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    <p>October 16, 2023</p>
+                </div>
+                <br>
+                <div>
+                    <p>This is why I like the nail salon.</p>
+                </div>
             </div>
-            <br>
-            <div>
-                <p><i class="fas fa-user"></i> Joseph Nguyen</p>
-                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                <p>October 16, 2023</p>
-                <!-- Your content here -->
+
+            <div class="info">
+                <div>
+                    <p><i class="fas fa-user"></i>  Joseph Nguyen</p>
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    <p>October 16, 2023</p>
+                </div>
+                <br>
+                <div>
+                    <p>This is why I like the nail salon.</p>
+                </div>
             </div>
-            <div>
-                <p>This is why I like the nail salon.</p>
+
+            <div class="info">
+                <div>
+                    <p><i class="fas fa-user"></i>  Someone Else</p>
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    <p>October 16, 2023</p>
+                    <!-- Your content here -->
+                </div>
+                <br>
+                <div>
+                    <p>This is why I kind of like the nail salon.</p>
+                </div>
             </div>
+            
         </div>
     </div>
 </div>
