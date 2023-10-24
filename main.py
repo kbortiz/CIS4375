@@ -14,7 +14,7 @@ conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.co
 app = flask.Flask(__name__)  # sets up the application
 app.config["DEBUG"] = True  # allow to show errors in browser
 
-today = date.today()  # sets today as today's date
+today = date.today()  # sets today as today's datee
 
 authorizedusers = [
     {  # Creates user with username admin and password cars2000
