@@ -8,17 +8,14 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" type="text/css" href="/styles.css">
-
     <script src="/piechart.js"></script>
     <script src="/search_box.js"></script>
- 
-
 </head>
 <body>
     <div class="wrapper">
         <%- include('partials/sidebar') %>
         <div class="main_content">
-            <div class="header" style="text-transform: uppercase;"><h2>Reward System <i class="fas fa-gift"></i></h2></div>
+            <div class="header" style="text-transform: uppercase;"><h2>Redemption History <i class="fas fa-history"></i></h2></div>
             <div class="info">
                 <div class="chart-container">
                     <div class="customer-total">
@@ -31,7 +28,7 @@
 
                 <div class="table">
                     <section class="table__header">
-                        <h2>Customer Reward Information</h2>
+                        <h2>Redemption History</h2>
                         <div class="input-group">
                             <input type="search" id="searchData" name="searchData" placeholder="Search Data...">
                             <i class="fa fa-search" aria-hidden="true"></i>
@@ -45,21 +42,21 @@
                                 <th>First Name <span class="icon-arrow">&#11014;</span></th>
                                 <th>Last Name <span class="icon-arrow">&#11014;</span></th>
                                 <th>Phone Number <span class="icon-arrow">&#11014;</span></th>
-                                <th>Last Visited Date <span class="icon-arrow">&#11014;</span></th>
+                                <th>Redemption Date <span class="icon-arrow">&#11014;</span></th>
+                                <th>Points Used <span class="icon-arrow">&#11014;</span></th>
                                 <th>Current Points <span class="icon-arrow">&#11014;</span></th>
-                                <th>Lifetime Points <span class="icon-arrow">&#11014;</span></th>
                             </tr>
                         </thead>
-                    <tbody>
-                        <% customers.forEach(function(customer) { %>
-                            <tr data-lifetime-points="<%= customer.lifetime_points %>">
-                                <td><%= customer.first_name %></td>
-                                <td><%= customer.last_name %></td>
-                                <td><%= customer.phone_number %></td>
-                                <td><%= customer.current_points %></td>
-                                <td><%= customer.lifetime_points %></td>
-                                <td><%= customer.ci_date %></td>
-                            </tr>
+                        <tbody>
+                            <% customers.forEach(function(customer) { %>
+                                <tr data-lifetime-points="<%= customer.lifetimePoints %>">
+                                    <td><%= customer.firstName %></td>
+                                    <td><%= customer.lastName %></td>
+                                    <td><%= customer.phoneNumber %></td>
+                                    <td><%= customer.redemptionDate %></td>
+                                    <td><%= customer.pointsUsed %></td>
+                                    <td><%= customer.currentPoints %></td>
+                                </tr>
                             <% }); %>
                         </tbody>
                     </table>
@@ -68,29 +65,14 @@
         </div>
     </div>
     <script>
-        // Add an event listener to the "Current Points" cells for editing
-    document.querySelectorAll('.content-table tbody tr td:nth-child(5)').forEach(function (cell) {
-        cell.addEventListener('click', function (e) {
-            cell.setAttribute('contentEditable', true);
-            cell.focus();
-        });
-        });
+        var categories = [
+            { name: 'New', minPoints: 1, maxPoints: 2 },
+            { name: 'At Risk', minPoints: 3, maxPoints: 4 },
+            { name: 'Regular', minPoints: 5, maxPoints: 20 },
+            { name: 'V.I.P', minPoints: 21, maxPoints: Infinity }
+        ];
     
-        // Add an event listener to save edited "Current Points" data
-    document.querySelectorAll('.content-table tbody tr td:nth-child(5)').forEach(function (cell) {
-        cell.addEventListener('blur', function (e) {
-            cell.setAttribute('contentEditable', false);
-        });
-    });
-    var categories = [
-        { name: 'New', minPoints: 1, maxPoints: 2 },
-        { name: 'At Risk', minPoints: 3, maxPoints: 4 },
-        { name: 'Regular', minPoints: 5, maxPoints: 20 },
-        { name: 'V.I.P', minPoints: 21, maxPoints: Infinity }
-    ];
-
     </script>
-
 
 </body>
 </html>

@@ -15,9 +15,11 @@ app.use((req, res, next) => {
     next();
 });
 
+
 app.get('/', (req, res) => {
     res.render('check-in');
 });
+
 
 app.get('/reward', (req, res) => {
 
@@ -27,6 +29,43 @@ app.get('/reward', (req, res) => {
     res.render('reward', { customers:customers});
     });
 });
+
+app.get('/promotion', (req, res) => {
+    res.render('promotion');
+});
+
+app.get('/redemption-history', (req, res) => {
+    const customers = [
+        {
+            firstName: 'Peter',
+            lastName: 'Parks',
+            phoneNumber: '8321121113',
+            redemptionDate: '10/10/2023',
+            pointsUsed: 3,
+            currentPoints: 5
+        },
+        {
+            firstName: 'Kim',
+            lastName: 'Luong',
+            phoneNumber: '2819127693',
+            redemptionDate: '10/20/2023',
+            pointsUsed: 10,
+            currentPoints: 50
+        },
+        {
+            firstName: 'Willy',
+            lastName: 'Lanka',
+            phoneNumber: '2819225555',
+            redemptionDate: '10/2/2023',
+            pointsUsed: 4,
+            currentPoints: 4
+        },
+    ];
+    res.render('redemption-history', { customers });
+});
+
+
+
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
