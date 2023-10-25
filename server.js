@@ -49,7 +49,32 @@ app.get('/reward', (req, res) => {
 });
 
 app.get('/promotion', (req, res) => {
-    res.render('promotion');
+    const promotions = [
+        {
+            promo_id: '1',
+            promo_name: 'BOGO 50%',
+            promo_description: 'Buy one Mani/Pedi get another 50% off',
+            expiration_date: '10/10/2023',
+            promo_status: 'INACTIVE',
+            promo_cost: '10'
+        },
+        {
+            promo_id: '2',
+            promo_name: '10% Off',
+            promo_description: '10% off one appointment',
+            expiration_date: '10/20/2023',
+            promo_status: 'INACTIVE',
+            promo_cost: '5'
+        },
+        {
+            promo_id: '3',
+            promo_name: '20% Off',
+            promo_description: '20% off one appointment',
+            expiration_date: '10/30/2023',
+            promo_status: 'ACTIVE',
+            promo_cost: '10'
+        },]
+    res.render('promotion',{ promotions });
 });
 
 app.get('/redemption-history', (req, res) => {
@@ -59,7 +84,8 @@ app.get('/redemption-history', (req, res) => {
             lastName: 'Parks',
             phoneNumber: '8321121113',
             redemptionDate: '10/10/2023',
-            pointsUsed: 3,
+            promo_name: '10% Off',
+            pointsUsed: 5,
             currentPoints: 5
         },
         {
@@ -67,6 +93,7 @@ app.get('/redemption-history', (req, res) => {
             lastName: 'Luong',
             phoneNumber: '2819127693',
             redemptionDate: '10/20/2023',
+            promo_name: 'BOGO 50%',
             pointsUsed: 10,
             currentPoints: 50
         },
@@ -75,7 +102,8 @@ app.get('/redemption-history', (req, res) => {
             lastName: 'Lanka',
             phoneNumber: '2819225555',
             redemptionDate: '10/2/2023',
-            pointsUsed: 4,
+            promo_name: '20% Off',
+            pointsUsed: 10,
             currentPoints: 4
         },
     ];
