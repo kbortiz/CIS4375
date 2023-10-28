@@ -223,6 +223,8 @@ thead tr th.asc span.icon-arrow{
   transform: rotate(180deg);
 }
 
+
+
 thead tr th.active,tbody td.active {
   color: #6c00bd;
 }
