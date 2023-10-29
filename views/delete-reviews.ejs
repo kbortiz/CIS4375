@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Delete Reviews</title>
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+</head>
+<style>
+    .delete {
+        padding: 10px 10px;
+        background-color: #f85c5b;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+    }
+    .delete:hover {
+        background-color: #c20908;
+        color: white;
+    }
+    .button {
+        float: right;
+        padding: 15px 15px;
+        background-color: #69f9da;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+    }
+    .button:hover {
+        background-color: #a795ff;
+        color: white;
+    }
+    .headerbox {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .headerblock1 {
+        width: 80%;
+        box-sizing: border-box;
+    }
+    .headerblock2 {
+        width: 20%;
+        box-sizing: border-box;
+    }
+    div.container {
+        text-align: center;
+        display: block;
+    }
+    div.info {
+        margin: auto;
+        width: 60%;
+        background-color: white;
+        padding: 50px;
+        display: inline-block;
+        float: none;
+        box-shadow: 3px 3px 8px #888888;
+    }
+</style>
+<body>
+<div class="wrapper">
+    <%- include('partials/sidebar') %>
+    <div class="main_content">
+        <div class="header">
+            <div class="headerbox" style="text-transform: uppercase;">
+                <h2 class="headerblock1">Delete Customer Reviews</h2>
+                <div class="headerblock2">
+                    <button class="button" onclick="location.href='http://localhost:3000/reviews'">Return</button>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+
+            <div class="info">
+                <h1>Average Rating: 4.67 <i class="fas fa-star"></i></h1>
+            </div>
+
+            <div class="info">
+                <div>
+                    <p><i class="fas fa-user"></i>  Joseph Nguyen</p>
+                    
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    <p>October 16, 2023</p>
+                    <!-- Your content here -->
+                </div>
+                <br>
+                <div>
+                    <p>This is why I like the nail salon.</p>
+                </div>
+                <br>
+                <button class="delete">Delete</button>
+            </div>
+
+            <div class="info">
+                <div>
+                    <p><i class="fas fa-user"></i>  Joseph Nguyen</p>
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    <p>October 16, 2023</p>
+                    <!-- Your content here -->
+                </div>
+                <br>
+                <div>
+                    <p>This is why I like the nail salon.</p>
+                </div>
+                <br>
+                <button class="delete">Delete</button>
+            </div>
+
+            <div class="info">
+                <div>
+                    <p><i class="fas fa-user"></i>  Someone Else</p>
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    <p>October 16, 2023</p>
+                    <!-- Your content here -->
+                </div>
+                <br>
+                <div>
+                    <p>This is why I kind of like the nail salon.</p>
+                </div>
+                <br>
+                <button class="delete">Delete</button>
+            </div>
+            
+        </div>
+    </div>
+</div>
+</body>
+</html>

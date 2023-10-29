@@ -92,8 +92,43 @@ app.get('/redemption-history', (req, res) => {
     res.render('redemption-history', { customers });
 });
 
+app.get('/reviews', (req, res) => {
+    res.render('reviews');
+});
 
+app.get('/delete-reviews', (req, res) => {
+    res.render('delete-reviews');
+});
 
+app.get('/customer-information', (req, res) => {
+    const customers = [
+        {
+            firstName: 'Peter',
+            lastName: 'Parks',
+            phoneNumber: '8321121113',
+            emailAddress: 'peterpark@gmail.com',
+            birthday: '1/1/2000',
+            lastVisit: '10/10/2023'
+        },
+        {
+            firstName: 'Kim',
+            lastName: 'Luong',
+            phoneNumber: '2819127693',
+            emailAddress: 'kimluong@gmail.com',
+            birthday: '2/14/1999',
+            lastVisit: '10/20/2023'
+        },
+        {
+            firstName: 'Willy',
+            lastName: 'Lanka',
+            phoneNumber: '2819225555',
+            emailAddress: 'willylanka@gmail.com',
+            birthday: '7/22/2002',
+            lastVisit: '10/2/2023'
+        },
+    ];
+    res.render('customer-information', { customers });
+});
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
