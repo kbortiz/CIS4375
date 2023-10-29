@@ -154,4 +154,49 @@ def put_updatepromo():
     execute_query(conn, changestatus)  # executes above query to set given mechanics currentcar to NULL
     return 'PUT REQUEST WORKED'
 
+@app.route('/register', methods=['POST'])
+def register_customer():
+    data = request.json
+    name = data['name']
+    email = data['email']
+    phone = data['phone']  
+
+    conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
+                             "Davi_Nails")
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute('INSERT INTO customers (name, email, phone) VALUES (%s, %s, %s)', (name, email, phone))  # include phone in SQL query
+        conn.commit()
+        return jsonify({"status": "success", "message": "Customer registered successfully"})
+    except mysql.connector.Error as err:
+        return jsonify({"status": "fail", "message": f"Error: {err}"})
+    finally:
+        cursor.close()
+        conn.close()
+
+
+@app.route('/check_customer', methods=['GET'])
+def check_customer():
+    email = request.args.get('email')
+\   
+    
+    conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
+                             "Davi_Nails")
+    cursor = conn.cursor(dictionary=True)
+
+    try:
+        cursor.execute('SELECT * FROM customers WHERE email = %s', (email))
+        account = cursor.fetchone()
+        if account:
+            return jsonify({"status": "exists", "data": account})
+        else:
+            return jsonify({"status": "not_exists", "message": "Customer does not exist"})
+    except mysql.connector.Error as err:
+        return jsonify({"status": "fail", "message": f"Error: {err}"})
+    finally:
+        cursor.close()
+        conn.close()
+
+
 app.run()
