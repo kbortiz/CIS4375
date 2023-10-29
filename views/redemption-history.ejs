@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Reward</title>
+    <title>Redemption History</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" type="text/css" href="/styles.css">
-    <script src="/piechart.js"></script>
     <script src="/search_box.js"></script>
 </head>
 <body>
@@ -17,15 +16,6 @@
         <div class="main_content">
             <div class="header" style="text-transform: uppercase;"><h2>Redemption History <i class="fas fa-history"></i></h2></div>
             <div class="info">
-                <div class="chart-container">
-                    <div class="customer-total">
-                        <h3>TOTAL CUSTOMERS: <span id="totalCustomers">???</span></h3>
-                    </div>
-                    <div id="doughnut-chart-container">
-                        <canvas></canvas>
-                    </div>
-                </div>
-
                 <div class="table">
                     <section class="table__header">
                         <h2>Redemption History</h2>
@@ -43,6 +33,7 @@
                                 <th>Last Name <span class="icon-arrow">&#11014;</span></th>
                                 <th>Phone Number <span class="icon-arrow">&#11014;</span></th>
                                 <th>Redemption Date <span class="icon-arrow">&#11014;</span></th>
+                                <th>Promotion Name <span class="icon-arrow">&#11014;</span></th>
                                 <th>Points Used <span class="icon-arrow">&#11014;</span></th>
                                 <th>Current Points <span class="icon-arrow">&#11014;</span></th>
                             </tr>
@@ -54,6 +45,7 @@
                                     <td><%= customer.lastName %></td>
                                     <td><%= customer.phoneNumber %></td>
                                     <td><%= customer.redemptionDate %></td>
+                                    <td><%= customer.promo_name %></td>
                                     <td><%= customer.pointsUsed %></td>
                                     <td><%= customer.currentPoints %></td>
                                 </tr>
@@ -64,15 +56,6 @@
             </div>
         </div>
     </div>
-    <script>
-        var categories = [
-            { name: 'New', minPoints: 1, maxPoints: 2 },
-            { name: 'At Risk', minPoints: 3, maxPoints: 4 },
-            { name: 'Regular', minPoints: 5, maxPoints: 20 },
-            { name: 'V.I.P', minPoints: 21, maxPoints: Infinity }
-        ];
-    
-    </script>
 
 </body>
 </html>

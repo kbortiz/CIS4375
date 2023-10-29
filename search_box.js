@@ -46,6 +46,14 @@ function searchTable() {
                 sortColumn = i;
                 sortAsc = true;
             }
+
+            // Add the 'asc' class to the sorted column
+            if (sortAsc) {
+                head.classList.add('asc');
+            } else {
+            // Remove the 'asc' class if descending
+                head.classList.remove('asc');
+            }
     
             sortTable(i, sortAsc);
         });

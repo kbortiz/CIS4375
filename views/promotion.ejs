@@ -1,17 +1,77 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Check-In</title>
+    <title>Promotion</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" type="text/css" href="/styles.css">
+    <script src="/search_box.js"></script>
 </head>
 <body>
 <div class="wrapper">
     <%- include('partials/sidebar') %>
     <div class="main_content">
-        <div class="header" style="text-transform: uppercase;"><h2>Promotion</h2></div>
+        <div class="header" style="text-transform: uppercase;"><h2>Promotion<i class="fas fa-tags"></i></h2></div>
         <div class="info">
-            <div>Promotion go here</div>
-            <!-- Your content here -->
+            <div class="table">
+                <section class="table__header">
+                    <h2>Redemption History</h2>
+                    <div class="input-group">
+                        <input type="search" id="searchData" name="searchData" placeholder="Search Data...">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </div>
+                </section>
+                
+                <table class="content-table">
+                <thead>
+                    <tr>
+                        <th>Promotion ID <span class="icon-arrow">&#11014;</span></th>
+                        <th>Promotion Name <span class="icon-arrow">&#11014;</span></th>
+                        <th>Promotion Description <span class="icon-arrow">&#11014;</span></th>
+                        <th>Expiration Date <span class="icon-arrow">&#11014;</span></th>
+                        <th>Status <span class="icon-arrow">&#11014;</span></th>
+                        <th>Point Cost <span class="icon-arrow">&#11014;</span></th>
+                        <th>Edit / Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Use EJS syntax to iterate through promotions and generate table rows -->
+                    <% promotions.forEach(promotion => { %>
+                            <td><%= promotion.promo_id %></td>
+                            <td><%= promotion.promo_name %></td>
+                            <td><%= promotion.promo_description %></td>
+                            <td><%= promotion.expiration_date %></td>
+                            <td><%= promotion.promo_status %></td>
+                            <td><%= promotion.promo_cost %></td>
+                            <td>
+                                <button onclick="editPromotion('<%= promotion.id %>')">Edit</button>
+                                <button onclick="deletePromotion('<%= promotion.id %>')">Delete</button>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+                </table>
+             </div>
+        
+            <h2>Add New Promotion</h2>
+            <form id="addPromotionForm" action="/addPromotion" method="POST">
+                <label for="pointsCost">Points Cost:</label>
+                <input type="text" name="pointsCost" required>
+                <br>
+                <label for="dateRange">Date Range:</label>
+                <input type="text" name="dateRange" required>
+                <br>
+                <label for="description">Description:</label>
+                <input type="text" name="description" required>
+                <br>
+                <label for="status">Status:</label>
+                <input type="checkbox" name="status">
+                <br>
+                <button type="submit">Add Promotion</button>
+            </form>
         </div>
     </div>
 </div>
