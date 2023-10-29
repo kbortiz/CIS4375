@@ -31,32 +31,12 @@ app.get('/reward', (req, res) => {
 });
 
 app.get('/promotion', (req, res) => {
-    const promotions = [
-        {
-            promo_id: '1',
-            promo_name: 'BOGO 50%',
-            promo_description: 'Buy one Mani/Pedi get another 50% off',
-            expiration_date: '10/10/2023',
-            promo_status: 'INACTIVE',
-            promo_cost: '10'
-        },
-        {
-            promo_id: '2',
-            promo_name: '10% Off',
-            promo_description: '10% off one appointment',
-            expiration_date: '10/20/2023',
-            promo_status: 'INACTIVE',
-            promo_cost: '5'
-        },
-        {
-            promo_id: '3',
-            promo_name: '20% Off',
-            promo_description: '20% off one appointment',
-            expiration_date: '10/30/2023',
-            promo_status: 'ACTIVE',
-            promo_cost: '10'
-        },]
-    res.render('promotion',{ promotions });
+            
+    axios.get(`http://127.0.0.1:5000/allpromos`)
+    .then((rewardresponse) => {
+    var promotions = rewardresponse.data;
+    res.render('promotion', { promotions:promotions});
+    });
 });
 
 app.get('/redemption-history', (req, res) => {
@@ -101,33 +81,11 @@ app.get('/delete-reviews', (req, res) => {
 });
 
 app.get('/customer-information', (req, res) => {
-    const customers = [
-        {
-            firstName: 'Peter',
-            lastName: 'Parks',
-            phoneNumber: '8321121113',
-            emailAddress: 'peterpark@gmail.com',
-            birthday: '1/1/2000',
-            lastVisit: '10/10/2023'
-        },
-        {
-            firstName: 'Kim',
-            lastName: 'Luong',
-            phoneNumber: '2819127693',
-            emailAddress: 'kimluong@gmail.com',
-            birthday: '2/14/1999',
-            lastVisit: '10/20/2023'
-        },
-        {
-            firstName: 'Willy',
-            lastName: 'Lanka',
-            phoneNumber: '2819225555',
-            emailAddress: 'willylanka@gmail.com',
-            birthday: '7/22/2002',
-            lastVisit: '10/2/2023'
-        },
-    ];
-    res.render('customer-information', { customers });
+    axios.get(`http://127.0.0.1:5000/customerinfo`)
+    .then((rewardresponse) => {
+     var customers = rewardresponse.data;
+     res.render('customer-information', { customers:customers});
+     });
 });
 
 app.listen(port, () => {

@@ -28,7 +28,6 @@
                 <table class="content-table">
                 <thead>
                     <tr>
-                        <th>Promotion ID <span class="icon-arrow">&#11014;</span></th>
                         <th>Promotion Name <span class="icon-arrow">&#11014;</span></th>
                         <th>Promotion Description <span class="icon-arrow">&#11014;</span></th>
                         <th>Expiration Date <span class="icon-arrow">&#11014;</span></th>
@@ -40,7 +39,6 @@
                 <tbody>
                     <!-- Use EJS syntax to iterate through promotions and generate table rows -->
                     <% promotions.forEach(promotion => { %>
-                            <td><%= promotion.promo_id %></td>
                             <td><%= promotion.promo_name %></td>
                             <td><%= promotion.promo_description %></td>
                             <td><%= promotion.expiration_date %></td>

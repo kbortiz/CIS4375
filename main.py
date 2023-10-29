@@ -51,7 +51,7 @@ def api_get_customercount():
 def api_get_customerinfo():
     conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
                              "Davi_Nails")
-    sql = "select ci.phone_number, ci.last_name, ci.first_name, ci.email, ci.birthday,( select chk.ci_date FROM check_ins AS chk where ci.cust_id = chk.cust_id order by chk.ci_date DESC LIMIT 1) as 'Last Visit' from customer_information ci order by ci.last_name;"
+    sql = "select ci.phone_number, ci.last_name, ci.first_name, ci.email, ci.birthday,(select DATE_FORMAT(chk.ci_date, '%m-%d-%Y') FROM check_ins AS chk where ci.cust_id = chk.cust_id order by chk.ci_date DESC LIMIT 1) as 'lastVisit' from customer_information ci order by ci.last_name;"
     printlogs = execute_read_query(conn, sql)
 
     return jsonify(printlogs)  # Prints all logs
@@ -69,7 +69,7 @@ def api_get_customerpoints():
 def api_get_reviews():
     conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
                              "Davi_Nails")
-    sql = "SELECT CONCAT (ci.first_name,' ', ci.last_name) AS 'Name', rev.rev_date, rev.rev_description, rev.rev_rating FROM customer_information AS ci inner join reviews AS rev ON ci.cust_id = rev.cust_id order by rev.rev_date DESC;"
+    sql = "SELECT CONCAT (ci.first_name,' ', ci.last_name) AS 'Name', rev.rev_date, rev.rev_description, rev.rev_rating FROM customer_information AS ci inner join reviews AS rev ON ci.cust_id = rev.cust_id order by rev.rev_date DESC LIMIT 3;"
     printlogs = execute_read_query(conn, sql)
 
     return jsonify(printlogs)  # Prints all logs
@@ -134,69 +134,17 @@ def put_updatepromo():
     newstatus = request_data['promo_status']
     id_num = request_data['promo_id']
 
-  ##  cursor = conn cursor = conn.cursor(dictionary=True)
- #       try:
- #       cursor.execute('SELECT * FROM promotions WHERE promo_status = "ACTIVE"')
- #       active = cursor.fetchone()
- #       if active:
- #           cursor.execute('SELECT * FROM promotions WHERE promo_id = %s'%(id_num))
-            
- #       else:
- #           changestatus = "UPDATE promotions SET promo_status = UPPER('%s') WHERE promo_id = '%s'" % (newstatus, id_num)
- #           execute_query(conn, changestatus)  # executes above query to set given mechanics currentcar to NULL
-  #  except mysql.connector.Error as err:
-  #      return jsonify({"status": "fail", "message": f"Error: {err}"})
- #   finally:
- #       cursor.close()
-  #      conn.close()
+    if newstatus.upper() == 'ACTIVE':
+        deactivate = "UPDATE promotions SET promo_status = 'INACTIVE' WHERE promo_status = 'ACTIVE' "
+        changestatus = "UPDATE promotions SET promo_status = UPPER('%s') WHERE promo_id = '%s'" % (newstatus, id_num)
+        execute_query(conn, deactivate)
+        execute_query(conn, changestatus)  # executes above query to set given mechanics currentcar to NULL
+        return 'Promotion set to ACTIVE'
+    elif newstatus.upper() == 'INACTIVE':
+        changestatus = "UPDATE promotions SET promo_status = UPPER('%s') WHERE promo_id = '%s'" % (newstatus, id_num)
+        execute_query(conn, changestatus)  # executes above query to set given mechanics currentcar to NULL
+        return 'Promotion set to INACTIVE'
 
-    changestatus = "UPDATE promotions SET promo_status = UPPER('%s') WHERE promo_id = '%s'" % (newstatus, id_num)
-    execute_query(conn, changestatus)  # executes above query to set given mechanics currentcar to NULL
-    return 'PUT REQUEST WORKED'
-
-@app.route('/register', methods=['POST'])
-def register_customer():
-    data = request.json
-    name = data['name']
-    email = data['email']
-    phone = data['phone']  
-
-    conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
-                             "Davi_Nails")
-    cursor = conn.cursor()
-
-    try:
-        cursor.execute('INSERT INTO customers (name, email, phone) VALUES (%s, %s, %s)', (name, email, phone))  # include phone in SQL query
-        conn.commit()
-        return jsonify({"status": "success", "message": "Customer registered successfully"})
-    except mysql.connector.Error as err:
-        return jsonify({"status": "fail", "message": f"Error: {err}"})
-    finally:
-        cursor.close()
-        conn.close()
-
-
-@app.route('/check_customer', methods=['GET'])
-def check_customer():
-    email = request.args.get('email')
-\   
-    
-    conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
-                             "Davi_Nails")
-    cursor = conn.cursor(dictionary=True)
-
-    try:
-        cursor.execute('SELECT * FROM customers WHERE email = %s', (email))
-        account = cursor.fetchone()
-        if account:
-            return jsonify({"status": "exists", "data": account})
-        else:
-            return jsonify({"status": "not_exists", "message": "Customer does not exist"})
-    except mysql.connector.Error as err:
-        return jsonify({"status": "fail", "message": f"Error: {err}"})
-    finally:
-        cursor.close()
-        conn.close()
 
 
 app.run()
