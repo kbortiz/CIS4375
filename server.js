@@ -141,15 +141,18 @@ app.put('/promotion/updatePromotion/:promoId', (req, res) => {
         promotion.promo_name = updatedPromotion.promo_name;
         promotion.promo_description = updatedPromotion.promo_description;
         promotion.expiration_date = updatedPromotion.expiration_date;
-        promotion.promo_status = updatedPromotion.promo_status;
         promotion.promo_cost = updatedPromotion.promo_cost;
 
-        res.json({ success: true });
+        // Update the promo_status here as well
+        promotion.promo_status = updatedPromotion.promo_status;
+
+        res.json({ success: true, promo_status: updatedPromotion.promo_status }); // Send back the updated status
     } else {
         console.error('Promotion not found for promoId: ' + promoId);
         res.status(404).json({ error: 'Promotion not found' });
     }
 });
+
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
