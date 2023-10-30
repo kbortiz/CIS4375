@@ -52,12 +52,12 @@
                         </thead>
                     <tbody>
                         <% customers.forEach(function(customer) { %>
-                            <tr data-lifetime-points="<%= customer.lifetime_points %>">
+                            <tr data-phoneNumber="<%= customer.phone_number %>">
                                 <td><%= customer.first_name %></td>
                                 <td><%= customer.last_name %></td>
                                 <td><%= customer.phone_number %></td>
                                 <td><%= customer.ci_date %></td>
-                                <td><%= customer.current_points %></td>
+                                <td class="editable-cell"><%= customer.current_points %></td> <!-
                                 <td><%= customer.lifetime_points %></td>
                             </tr>
                             <% }); %>
@@ -68,27 +68,52 @@
         </div>
     </div>
     <script>
-        // Add an event listener to the "Current Points" cells for editing
-    document.querySelectorAll('.content-table tbody tr td:nth-child(5)').forEach(function (cell) {
-        cell.addEventListener('click', function (e) {
-            cell.setAttribute('contentEditable', true);
-            cell.focus();
-        });
+        // Function to send an update request to the server
+        async function updateCurrentPoints(phone_number, newPoints) {
+            try {
+                const response = await fetch(`/reward/updateCurrentPoints/${phone_number}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ newPoints })
+                });
+    
+                if (response.ok) {
+                    console.log('Current Points updated successfully.');
+                } else {
+                    console.error('Failed to update Current Points.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    
+        const editableCells = document.querySelectorAll('.content-table tbody tr td:nth-child(5)');
+        
+        editableCells.forEach(function (cell) {
+            cell.addEventListener('click', function (e) {
+                cell.setAttribute('contentEditable', true);
+                cell.focus();
+            });
+    
+            cell.addEventListener('blur', function (e) {
+                cell.setAttribute('contentEditable', false);
+    
+                // Get the phone number from the parent row
+                const phoneNumber = cell.closest('tr').querySelector('td:nth-child(3)').textContent;
+                const newPoints = cell.innerText; // Get the new Current Points value
+                updateCurrentPoints(phone_number, newPoints);
+            });
         });
     
-        // Add an event listener to save edited "Current Points" data
-    document.querySelectorAll('.content-table tbody tr td:nth-child(5)').forEach(function (cell) {
-        cell.addEventListener('blur', function (e) {
-            cell.setAttribute('contentEditable', false);
-        });
-    });
-    var categories = [
-        { name: 'New', minPoints: 1, maxPoints: 2 },
-        { name: 'At Risk', minPoints: 3, maxPoints: 4 },
-        { name: 'Regular', minPoints: 5, maxPoints: 20 },
-        { name: 'V.I.P', minPoints: 21, maxPoints: Infinity }
-    ];
-
+        // Your categories data (you can keep this part as-is)
+        var categories = [
+            { name: 'New', minPoints: 1, maxPoints: 2 },
+            { name: 'At Risk', minPoints: 3, maxPoints: 4 },
+            { name: 'Regular', minPoints: 5, maxPoints: 20 },
+            { name: 'V.I.P', minPoints: 21, maxPoints: Infinity }
+        ];
     </script>
 
 

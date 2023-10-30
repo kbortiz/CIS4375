@@ -92,6 +92,22 @@ app.get('/customer-information', (req, res) => {
      });
 });
 
+app.put('/reward/updateCurrentPoints/:phoneNumber', (req, res) => {
+    const phoneNumber = req.params.phoneNumber;
+    const newPoints = req.body.newPoints;
+
+    // Find and update the customer in the 'customers' array
+    const customer = customers.find((c) => c.phoneNumber === phoneNumber);
+    if (customer) {
+        customer.currentPoints = newPoints;
+        res.json({ success: true });
+    } else {
+        console.error('Customer not found for phone number: ' + phoneNumber);
+        res.status(404).json({ error: 'Customer not found' });
+    }
+});
+
+
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
