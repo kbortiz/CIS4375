@@ -118,10 +118,18 @@ def post_create_promo():
     promodescription = request_data['promo_description']
     promostatus = request_data['promo_status']
     promocost = request_data['promo_cost']
-    addreview = "INSERT INTO promotions (promo_name, promo_description, promo_status, promo_cost) VALUES ('%s', '%s', '%s',%s)" % (
-    promoname, promodescription, promostatus, promocost)
-    execute_query(conn, addreview)  # executes above query to add the provided data to table
-    return 'Promotion Added'
+    if promostatus.upper() == 'ACTIVE':
+        deactivate = "UPDATE promotions SET promo_status = 'INACTIVE' WHERE promo_status = 'ACTIVE' "
+        addreview = "INSERT INTO promotions (promo_name, promo_description, promo_status, promo_cost) VALUES ('%s', '%s', UPPER('%s'),%s)" % (
+        promoname, promodescription, promostatus, promocost)
+        execute_query(conn, deactivate)
+        execute_query(conn, addreview)  # executes above query to set given mechanics currentcar to NULL
+        return 'Active Promotion added'
+    elif promostatus.upper() == 'INACTIVE':
+        addreview = "INSERT INTO promotions (promo_name, promo_description, promo_status, promo_cost) VALUES ('%s', '%s', UPPER('%s'),%s)" % (
+        promoname, promodescription, promostatus, promocost)
+        execute_query(conn, addreview)  # executes above query to add the provided data to table
+        return 'Inactive Promotion added'
 
 
 

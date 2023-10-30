@@ -73,7 +73,11 @@ app.get('/redemption-history', (req, res) => {
 });
 
 app.get('/reviews', (req, res) => {
-    res.render('reviews');
+    axios.get(`http://127.0.0.1:5000/allreviews`)
+    .then((rewardresponse) => {
+    var reviews = rewardresponse.data;
+    res.render('reviews', { reviews:reviews});
+    });
 });
 
 app.get('/delete-reviews', (req, res) => {
