@@ -40,17 +40,18 @@
                 <tbody>
                     <!-- Use EJS syntax to iterate through promotions and generate table rows -->
                     <% promotions.forEach(promotion => { %>
-                            <td><%= promotion.promo_id %></td>
-                            <td><%= promotion.promo_name %></td>
-                            <td><%= promotion.promo_description %></td>
-                            <td><%= promotion.expiration_date %></td>
-                            <td>
+                        <tr data-promo-id="<%= promotion.promo_id %>">
+                            <td data-field="promo_id"><%= promotion.promo_id %></td>
+                            <td data-field="promo_name"><%= promotion.promo_name %></td>
+                            <td data-field="promo_description"><%= promotion.promo_description %></td>
+                            <td data-field="expiration_date"><%= promotion.expiration_date %></td>
+                            <td data-field="promo_status">
                                 <div class="status <%= promotion.promo_status %>"><%= promotion.promo_status %></div>
-                              </td>
-                            <td><%= promotion.promo_cost %></td>
+                            </td>
+                            <td data-field="promo_cost"><%= promotion.promo_cost %></td>
                             <td>
-                                <button class="edit-button" onclick="editPromotion('<%= promotion.id %>')">Edit</button>
-                                <button class="delete-button" onclick="deletePromotion('<%= promotion.id %>')">Delete</button>
+                                <button class="edit-button" onclick="editPromotion('<%= promotion.promo_id %>')">Edit</button>
+                                <button class="delete-button" onclick="deletePromotion('<%= promotion.promo_id %>')">Delete</button>
                             </td>
                         </tr>
                     <% }); %>
@@ -118,29 +119,93 @@
     </div>
 </div>
 <script>
+    // Edit and Delete promotion 
+    function editPromotion(id) {
+        const row = document.querySelector(`tr[data-promo-id="${id}"]`);
+        const fields = row.querySelectorAll('td');
+
+        // Make fields editable
+        fields.forEach(field => {
+            field.contentEditable = true;
+        });
+
+        // Change "Edit" button to "Save" button with green color
+        const editButton = row.querySelector('.edit-button');
+        editButton.textContent = 'Save';
+        editButton.style.backgroundColor = '#40a347';
+        editButton.style.color = 'white';
+        editButton.onclick = () => savePromotion(id);
+    }
+
+    function savePromotion(id) {
+        const row = document.querySelector(`tr[data-promo-id="${id}"]`);
+        const fields = row.querySelectorAll('td');
+
+        // Collect the updated values from the editable fields
+        const updatedValues = {};
+        fields.forEach(field => {
+            updatedValues[field.getAttribute('data-field')] = field.innerText;
+            field.contentEditable = false;
+        });
+
+        // Send updatedValues to the server via an AJAX request for saving
+        fetch(`/promotion/updatePromotion/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedValues),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response, e.g., show success or error messages
+                if (data.success) {
+                    // Data was successfully updated on the server
+                } else {
+                    // Handle the error
+                }
+            })
+            .catch(error => {
+                // Handle the fetch error
+            });
+
+        // Change "Save" button back to "Edit" button
+        const saveButton = row.querySelector('.edit-button');
+        saveButton.textContent = 'Edit';
+        saveButton.style.backgroundColor = ''; // Remove the green color
+        saveButton.onclick = () => editPromotion(id);
+    }
+
     document.getElementById('submitPromotion').addEventListener('click', function() {
-        // Get the form data
-        const pointsCost = document.querySelector('[name="pointsCost"]').value;
-        const expirationDate = document.querySelector('[name="expirationDate"]').value;
-        const description = document.querySelector('[name="description"]').value;
-        const status = document.querySelector('[name="status"]').checked ? 'ACTIVE' : 'INACTIVE';
+    // Get the form data
+    const pointsCost = document.querySelector('[name="pointsCost"]').value;
+    const expirationDate = document.querySelector('[name="expirationDate"]').value;
+    const description = document.querySelector('[name="promotionName"]').value; // Changed to "promotionName"
+    const status = document.querySelector('[name="status"]').checked ? 'ACTIVE' : 'INACTIVE';
 
-        // Create a new table row
-        const newRow = document.createElement('tr');
-        newRow.innerHTML = `
-            <td>New ID</td>
-            <td>${description}</td>
-            <td>${description}</td>
-            <td>${pointsCost}</td>
-            <td>${expirationDate}</td>
-            <td class="${status}">${status}</td>
-            <td>Edit / Delete</td>
-        `;
+    // Create a new table row
+    const newRow = document.createElement('tr');
+    newRow.innerHTML = `
+        <td>New ID</td>
+        <td>${description}</td>
+        <td>${description}</td>
+        <td>${pointsCost}</td>
+        <td>${expirationDate}</td>
+        <td class="${status}">${status}</td>
+        <td><button class="edit-button" onclick="editPromotion('New ID')">Edit</button></td>
+    `;
 
-        // Append the new row to the table
-        document.querySelector('.content-table tbody').appendChild(newRow);
+    // Append the new row to the table
+    document.querySelector('.content-table tbody').appendChild(newRow);
+
+    // After adding a new promotion, you should add an event listener for editing that new promotion.
+    newRow.querySelector('.edit-button').addEventListener('click', function() {
+        editPromotion('New ID'); // You can use a unique ID for the new promotion
     });
+});
+
 </script>
+
 
 
 </body>

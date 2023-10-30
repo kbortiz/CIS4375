@@ -35,7 +35,31 @@ const customers = [
     },
 ];
 
-
+const promotions = [
+    {
+        promo_id: '1',
+        promo_name: 'BOGO 50%',
+        promo_description: 'Buy one Mani/Pedi get another 50% off',
+        expiration_date: '10/10/2023',
+        promo_status: 'INACTIVE',
+        promo_cost: '10'
+    },
+    {
+        promo_id: '2',
+        promo_name: '10% Off',
+        promo_description: '10% off one appointment',
+        expiration_date: '10/20/2023',
+        promo_status: 'INACTIVE',
+        promo_cost: '5'
+    },
+    {
+        promo_id: '3',
+        promo_name: '20% Off',
+        promo_description: '20% off one appointment',
+        expiration_date: '10/30/2023',
+        promo_status: 'ACTIVE',
+        promo_cost: '10'
+    },]
 
 // Define a middleware to set the currentUrl for all routes
 app.use((req, res, next) => {
@@ -54,31 +78,6 @@ app.get('/reward', (req, res) => {
 });
 
 app.get('/promotion', (req, res) => {
-    const promotions = [
-        {
-            promo_id: '1',
-            promo_name: 'BOGO 50%',
-            promo_description: 'Buy one Mani/Pedi get another 50% off',
-            expiration_date: '10/10/2023',
-            promo_status: 'INACTIVE',
-            promo_cost: '10'
-        },
-        {
-            promo_id: '2',
-            promo_name: '10% Off',
-            promo_description: '10% off one appointment',
-            expiration_date: '10/20/2023',
-            promo_status: 'INACTIVE',
-            promo_cost: '5'
-        },
-        {
-            promo_id: '3',
-            promo_name: '20% Off',
-            promo_description: '20% off one appointment',
-            expiration_date: '10/30/2023',
-            promo_status: 'ACTIVE',
-            promo_cost: '10'
-        },]
     res.render('promotion',{ promotions });
 });
 
@@ -116,6 +115,7 @@ app.get('/redemption-history', (req, res) => {
 });
 
 
+// Update the Current Points
 app.put('/reward/updateCurrentPoints/:phoneNumber', (req, res) => {
     const phoneNumber = req.params.phoneNumber;
     const newPoints = req.body.newPoints;
@@ -131,6 +131,25 @@ app.put('/reward/updateCurrentPoints/:phoneNumber', (req, res) => {
     }
 });
 
+// Update promotions
+app.put('/promotion/updatePromotion/:promoId', (req, res) => {
+    const promoId = req.params.promoId;
+    const updatedPromotion = req.body;
+
+    const promotion = promotions.find((p) => p.promo_id === promoId);
+    if (promotion) {
+        promotion.promo_name = updatedPromotion.promo_name;
+        promotion.promo_description = updatedPromotion.promo_description;
+        promotion.expiration_date = updatedPromotion.expiration_date;
+        promotion.promo_status = updatedPromotion.promo_status;
+        promotion.promo_cost = updatedPromotion.promo_cost;
+
+        res.json({ success: true });
+    } else {
+        console.error('Promotion not found for promoId: ' + promoId);
+        res.status(404).json({ error: 'Promotion not found' });
+    }
+});
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
