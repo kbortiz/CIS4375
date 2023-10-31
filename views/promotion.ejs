@@ -8,6 +8,10 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" type="text/css" href="/styles.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>    
+
     <script src="/search_box.js"></script>
     <script src="/editPromotion.js"></script>
     <style>
@@ -88,11 +92,7 @@
                                 </td>
                                 <td><label for="expirationDate">Expiration Date:</label></td>
                                 <td>
-                                    <div class="input-with-calendar">
-                                        <i class="fa fa-calendar" aria-hidden="true"></i> <!-- Calendar icon --> <p>&nbsp</p>
-                                        <input type="text" name="manualExpirationDate" id="manualExpirationDate" placeholder="MM/DD/YYYY">
-                                    </div>
-                                    <input type="date" name="expirationDate" id="expirationDate" style="display: none;" required>
+                                    <input type="text" name="manualExpirationDate" id="manualExpirationDate" placeholder="MM/DD/YYYY">
                                 </td>
                             </tr>
                             <tr>
@@ -169,6 +169,13 @@
                 .catch(error => {
                     console.error(error);
                 });
+        });
+
+        // Initialize 'flatpickr' for manualExpirationDate input
+        const manualExpirationDateInput = document.getElementById('manualExpirationDate');
+        const flatpickrInstance = flatpickr(manualExpirationDateInput, {
+            dateFormat: 'm/d/Y',
+            enableTime: false,
         });
     });
 </script>
