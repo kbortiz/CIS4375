@@ -61,6 +61,9 @@ const promotions = [
         promo_cost: '10'
     },]
 
+let nextPromoId = (promotions.length + 1).toString(); // Track the next available promotion ID
+
+
 // Define a middleware to set the currentUrl for all routes
 app.use((req, res, next) => {
     res.locals.currentUrl = req.originalUrl;
@@ -81,6 +84,38 @@ app.get('/promotion', (req, res) => {
     res.render('promotion',{ promotions });
 });
 
+
+// Add a new promotion
+app.post('/promotion', (req, res) => {
+    // Extract promotion data from the request body
+    const { promotionName, promotionDescription, expirationDate, status, pointsCost } = req.body;
+
+    // Create a new promotion object
+    const newPromotion = {
+        promo_id: nextPromoId,
+        promo_name: promotionName,
+        promo_description: promotionDescription,
+        expiration_date: expirationDate,
+        promo_status: status,
+        promo_cost: pointsCost,
+    };
+
+    // Add the new promotion to the promotions array
+    promotions.push(newPromotion);
+
+    // Increment the next promotion ID
+    nextPromoId = (parseInt(nextPromoId) + 1).toString();
+
+    // Return a success response or handle errors as needed
+    res.json({ success: true, promo_id: newPromotion.promo_id });
+});
+
+// Get the next promotion ID in the sequence
+app.get('/getNextPromoID', (req, res) => {
+    res.json({ nextPromoID: nextPromoId });
+});
+
+// Get Redemption History Page
 app.get('/redemption-history', (req, res) => {
     const customers = [
         {

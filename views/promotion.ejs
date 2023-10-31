@@ -70,7 +70,7 @@
                 <section class="table__header">
                     <h2>Add New Promotion</h2>
                 </section>
-                <form id="addPromotionForm" action="/addPromotion" method="POST">
+                <form id="addPromotionForm" action="/promotion" method="POST">
                     <table class="content-table">
                         <tbody>
                             <tr>
@@ -115,7 +115,7 @@
                                 <td></td> <!-- Empty cell for spacing -->
                                 <td></td>
                                 <td></td>
-                                <td><button type="button" id="submitPromotion">Add Promotion</button></td>
+                                <td><button type="button" id="addPromotionButton">Add Promotion</button> </td>
                             </tr>
                         </tbody>
                     </table>
@@ -124,6 +124,55 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const addPromotionButton = document.getElementById('addPromotionButton');
+        const promoTable = document.querySelector('.content-table tbody');
+
+        addPromotionButton.addEventListener('click', function () {
+            // Fetch the next available promotion ID from the server
+            fetch('/getNextPromoID')
+                .then(response => response.json())
+                .then(data => {
+                    const nextPromoID = data.nextPromoID;
+
+                    // Get form input values
+                    const promotionName = document.querySelector('input[name=promotionName]').value;
+                    const promotionDescription = document.querySelector('input[name=promotionDescription]').value;
+                    const pointsCost = document.querySelector('input[name=pointsCost]').value;
+                    const expirationDate = document.querySelector('input[name=expirationDate]').value;
+                    const status = document.querySelector('input[name=status]:checked').value;
+
+                    // Create a new row for the table with the next available ID
+                    const newRow = document.createElement('tr');
+                    newRow.innerHTML = `
+                        <td data-field="promo_id">${nextPromoID}</td>
+                        <td data-field="promo_name">${promotionName}</td>
+                        <td data-field="promo_description">${promotionDescription}</td>
+                        <td data-field="expiration_date">${expirationDate}</td>
+                        <td data-field="promo_status">
+                            <div class="status ${status}">${status}</div>
+                        </td>
+                        <td data-field="promo_cost">${pointsCost}</td>
+                        <td>
+                            <button class="edit-button" onclick="editPromotion('${nextPromoID}')">Edit</button>
+                            <button class="delete-button" onclick="deletePromotion('${nextPromoID}')">Delete</button>
+                        </td>
+                    `;
+
+                    // Append the new row to the table
+                    promoTable.appendChild(newRow);
+
+                    // Clear the form fields
+                    document.getElementById('addPromotionForm').reset();
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        });
+    });
+</script>
+
 
 </body>
 </html>
