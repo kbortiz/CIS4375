@@ -77,8 +77,13 @@ app.get('/', (req, res) => {
 
 
 app.get('/reward', (req, res) => {
-    res.render('reward', { customers });
+    const currentPage = 1; // Set the current page here
+    const totalItems = customers.length;
+    const itemsPerPage = 25; // Define itemsPerPage
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    res.render('reward', { customers, currentPage, totalPages, itemsPerPage }); // Pass itemsPerPage to the view
 });
+
 
 app.get('/promotion', (req, res) => {
     res.render('promotion',{ promotions });

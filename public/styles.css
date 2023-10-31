@@ -409,3 +409,33 @@ thead tr th.active,tbody td.active {
   margin-left: 5px; /* Adjust the margin as needed */
 }
 
+
+
+/* Adding the css for page control */
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.pagination-controls button {
+  background-color: #69f9da;
+  color: #000;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  margin: 0 10px; /* Add margin for spacing between buttons */
+}
+
+.pagination-controls #currentPage {
+  font-weight: bold;
+  color: #000;
+  margin: 0 10px; /* Add margin for spacing between buttons */
+}
+
+.pagination-controls button:hover {
+  background-color: #40a347;
+  color: white;
+}

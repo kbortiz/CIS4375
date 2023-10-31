@@ -14,6 +14,7 @@
 
     <script src="/search_box.js"></script>
     <script src="/editPromotion.js"></script>
+    <script src="/pageControl.js"></script>
     <style>
         td[data-field] input {
             height: 30px;
@@ -67,6 +68,12 @@
                     <% }); %>
                 </tbody>
                 </table>
+                    <!-- Pagination Controls -->
+                <div class="pagination-controls">
+                    <button id="prevPageButton" class="pagination-button">Previous</button>
+                    <span id="currentPage" class="current-page">1</span>
+                    <button id="nextPageButton" class="pagination-button">Next</button>
+                </div>
              </div>
              
              <!-- Adding new promotion form -->
@@ -90,7 +97,7 @@
                                 <td>
                                     <input type="text" name="pointsCost" required>
                                 </td>
-                                <td><label for="expirationDate">Expiration Date:</label></td>
+                                <td><label for="expirationDate"><i class="fa fa-calendar" style="color: #000000;"></i> Expiration Date: </label></td>
                                 <td>
                                     <input type="text" name="manualExpirationDate" id="manualExpirationDate" placeholder="MM/DD/YYYY">
                                 </td>
