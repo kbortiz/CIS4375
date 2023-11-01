@@ -395,6 +395,43 @@ thead tr th.active,tbody td.active {
 /*--------------------------------------------------*/
 /* Adding CSS styles for calendar icon for the form */
 /*--------------------------------------------------*/
+.wrapper .main_content .table .content-form {
+  border-collapse: collapse;
+  font-size: 0.9em;
+  width:96%;
+  border-radius: 5px 5px 0 0;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  margin-left: 2%;
+  margin-right: 2%;
+  margin-bottom: 2%;
+}
+
+.content-form thead tr {
+  background-color: #69f9da;
+  color: #000000;
+  text-align: left;
+  font-weight: bold;
+}
+
+.content-form th,
+.content-form td {
+  padding: 12px 15px;
+}
+
+.content-form tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.content-form tbody tr:nth-of-type(even) {
+  background-color: #eeeeee;
+}
+
+.content-form tbody tr:last-of-type {
+  border-bottom: 2px solid #69f9da;
+}
+
+
 
 .input-with-calendar {
   display: flex;
