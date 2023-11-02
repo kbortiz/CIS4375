@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Check-In</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/styles.css">
 </head>
 <body>
@@ -10,13 +11,16 @@
     <div class="main_content">
         <div class="header" style="text-transform: uppercase;"><h2>Customer Check-In</h2></div>
         <div class="info">
-            <form action="/checkin" method="post">
-            <div class="mb-3">
-                <label for="phone">Phone Number:</label>
-                <input type="text" id="phone" name="phone" value="" required>
-                <input type="submit" value="Check In">
-            </div>
+            <form action="/checkin" method="post" class="text-center">
+                <div class="input-field">
+                    <label for="phone" class="label-bigger">Phone Number:</label>
+                    <input type="text" id="phone" name="phone" class="form-control form-control-lg" required>
+                    <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+                </div>
             </form>
+
+            <!-- Centered Material Design-style header text -->
+            <h3 class="text-center mt-4 font-weight-bold">Welcome to DaVi Nail</h3>
         </div>
     </div>
 </div>
