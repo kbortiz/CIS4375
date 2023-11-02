@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Redemption History</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+    <script src="/search_box.js"></script>
+    <script src="/pageControl.js"></script>
+</head>
+<body>
+    <div class="wrapper">
+        <%- include('partials/sidebar') %>
+        <div class="main_content">
+            <div class="header" style="text-transform: uppercase;"><h2>Redemption History <i class="fas fa-history"></i></h2></div>
+            <div class="info">
+                <div class="table">
+                    <section class="table__header">
+                        <h2>Redemption History</h2>
+                        <div class="input-group">
+                            <input type="search" id="searchData" name="searchData" placeholder="Search Data...">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                        </div>
+                    </section>
+
+
+                    <table class="content-table">
+                        <thead>
+                            <tr>
+                                <th>First Name <span class="icon-arrow">&#11014;</span></th>
+                                <th>Last Name <span class="icon-arrow">&#11014;</span></th>
+                                <th>Phone Number <span class="icon-arrow">&#11014;</span></th>
+                                <th>Redemption Date <span class="icon-arrow">&#11014;</span></th>
+                                <th>Promotion Name <span class="icon-arrow">&#11014;</span></th>
+                                <th>Points Used <span class="icon-arrow">&#11014;</span></th>
+                                <th>Current Points <span class="icon-arrow">&#11014;</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% customers.forEach(function(customer) { %>
+                                <tr data-lifetime-points="<%= customer.lifetimePoints %>">
+                                    <td><%= customer.firstName %></td>
+                                    <td><%= customer.lastName %></td>
+                                    <td><%= customer.phoneNumber %></td>
+                                    <td><%= customer.redemptionDate %></td>
+                                    <td><%= customer.promo_name %></td>
+                                    <td><%= customer.pointsUsed %></td>
+                                    <td><%= customer.currentPoints %></td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                    <!-- Pagination Controls -->
+                    <div class="pagination-controls">
+                        <button id="prevPageButton" class="pagination-button">Previous</button>
+                        <span id="currentPage" class="current-page">1</span>
+                        <button id="nextPageButton" class="pagination-button">Next</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

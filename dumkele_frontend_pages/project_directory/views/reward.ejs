@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reward</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+
+    <script src="/piechart.js"></script>
+    <script src="/search_box.js"></script>
+    <script src="/pageControl.js"></script>
+
+</head>
+<body>
+    <div class="wrapper">
+        <%- include('partials/sidebar') %>
+        <div class="main_content">
+            <div class="header" style="text-transform: uppercase;"><h2>Reward System <i class="fas fa-gift"></i></h2></div>
+            <div class="info">
+                <div class="chart-container">
+                    <div class="customer-total">
+                        <h3>TOTAL CUSTOMERS: <span id="totalCustomers">???</span></h3>
+                    </div>
+                    <div id="doughnut-chart-container">
+                        <canvas></canvas>
+                    </div>
+                </div>
+
+                <div class="table">
+                    <section class="table__header">
+                        <h2>Customer Reward Information</h2>
+                        <div class="input-group">
+                            <input type="search" id="searchData" name="searchData" placeholder="Search Data...">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                        </div>
+                    </section>
+
+                    <table class="content-table">
+                        <thead>
+                            <tr>
+                                <th>First Name <span class="icon-arrow">&#11014;</span></th>
+                                <th>Last Name <span class="icon-arrow">&#11014;</span></th>
+                                <th>Phone Number <span class="icon-arrow">&#11014;</span></th>
+                                <th>Last Visited Date <span class="icon-arrow">&#11014;</span></th>
+                                <th>Current Points <span class="icon-arrow">&#11014;</span></th>
+                                <th>Lifetime Points <span class="icon-arrow">&#11014;</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% customers.forEach(function(customer) { %>
+                                <tr data-phoneNumber="<%= customer.phoneNumber %>">
+                                    <td><%= customer.firstName %></td>
+                                    <td><%= customer.lastName %></td>
+                                    <td><%= customer.phoneNumber %></td>
+                                    <td><%= customer.lastVisit %></td>
+                                    <td class="editable-cell"><%= customer.currentPoints %></td> <!-- Add class for editable cells -->
+                                    <td><%= customer.lifetimePoints %></td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                    <!-- Pagination Controls -->
+                    <div class="pagination-controls">
+                        <button id="prevPageButton" class="pagination-button">Previous</button>
+                        <span id="currentPage" class="current-page">1</span>
+                        <button id="nextPageButton" class="pagination-button">Next</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Function to send an update request to the server
+        async function updateCurrentPoints(phoneNumber, newPoints) {
+            try {
+                const response = await fetch(`/reward/updateCurrentPoints/${phoneNumber}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ newPoints })
+                });
+    
+                if (response.ok) {
+                    console.log('Current Points updated successfully.');
+                } else {
+                    console.error('Failed to update Current Points.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    
+        const editableCells = document.querySelectorAll('.content-table tbody tr td:nth-child(5)');
+        
+        editableCells.forEach(function (cell) {
+            cell.addEventListener('click', function (e) {
+                cell.setAttribute('contentEditable', true);
+                cell.focus();
+            });
+    
+            cell.addEventListener('blur', function (e) {
+                cell.setAttribute('contentEditable', false);
+    
+                // Get the phone number from the parent row
+                const phoneNumber = cell.closest('tr').querySelector('td:nth-child(3)').textContent;
+                const newPoints = cell.innerText; // Get the new Current Points value
+                updateCurrentPoints(phoneNumber, newPoints);
+            });
+        });
+    
+        // Your categories data (you can keep this part as-is)
+        var categories = [
+            { name: 'New', minPoints: 1, maxPoints: 2 },
+            { name: 'At Risk', minPoints: 3, maxPoints: 4 },
+            { name: 'Regular', minPoints: 5, maxPoints: 20 },
+            { name: 'V.I.P', minPoints: 21, maxPoints: Infinity }
+        ];
+    </script>
+
+
+</body>
+</html>
