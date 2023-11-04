@@ -39,7 +39,6 @@
                 <table class="content-table">
                 <thead>
                     <tr>
-                        <th>Promotion ID <span class="icon-arrow">&#11014;</span></th>
                         <th>Promotion Name <span class="icon-arrow">&#11014;</span></th>
                         <th>Promotion Description <span class="icon-arrow">&#11014;</span></th>
                         <th>Expiration Date <span class="icon-arrow">&#11014;</span></th>
@@ -51,19 +50,11 @@
                 <tbody>
                     <!-- Use EJS syntax to iterate through promotions and generate table rows -->
                     <% promotions.forEach(promotion => { %>
-<<<<<<< HEAD
-                            <td><%= promotion.promo_name %></td>
-                            <td><%= promotion.promo_description %></td>
-                            <td><%= promotion.expiration_date %></td>
-                            <td>
-=======
                         <tr data-promo-id="<%= promotion.promo_id %>">
-                            <td data-field="promo_id"><%= promotion.promo_id %></td>
                             <td data-field="promo_name"><%= promotion.promo_name %></td>
                             <td data-field="promo_description"><%= promotion.promo_description %></td>
-                            <td data-field="expiration_date"><%= promotion.expiration_date %></td>
+                            <td data-field="exp_date"><%= promotion.exp_date %></td>
                             <td data-field="promo_status">
->>>>>>> origin/Kim_frontend
                                 <div class="status <%= promotion.promo_status %>"><%= promotion.promo_status %></div>
                             </td>
                             <td data-field="promo_cost"><%= promotion.promo_cost %></td>
@@ -88,38 +79,38 @@
                 <section class="table__header">
                     <h2>Add New Promotion</h2>
                 </section>
-                <form id="addPromotionForm" action="/promotion" method="POST">
+                <form id="addPromotionForm">
                     <table class="content-form">
                         <tbody>
                             <tr>
-                                <td><label for="promotionName">Promotion Name:</label></td>
-                                <td colspan="3"><input type="text" name="promotionName" required></td>
+                                <td><label for="promo_name">Promotion Name:</label></td>
+                                <td colspan="3"><input type="text" id = "promo_name" name="promo_name" required></td>
                             </tr>
                             <tr>
-                                <td><label for="promotionDescription">Description:</label></td>
-                                <td colspan="3"><input type="text" name="promotionDescription" required></td>
+                                <td><label for="promo_description">Description:</label></td>
+                                <td colspan="3"><input type="text" id = "promo_description" name="promo_description" required></td>
                             </tr>
                             <tr>
-                                <td><label for="pointsCost">Points Cost:</label></td>
+                                <td><label for="promo_cost">Points Cost:</label></td>
                                 <td>
-                                    <input type="text" name="pointsCost" required>
+                                    <input type="text" id = "promo_cost" name="promo_cost" required>
                                 </td>
-                                <td><label for="expirationDate"><i class="fa fa-calendar" style="color: #000000;"></i> Expiration Date: </label></td>
+                                <td><label for="ExpirationDate"><i class="fa fa-calendar" style="color: #000000;"></i> Expiration Date: </label></td>
                                 <td>
-                                    <input type="text" name="manualExpirationDate" id="manualExpirationDate" placeholder="MM/DD/YYYY">
+                                    <input type="text" name="exp_date" id="exp_date" placeholder="MM/DD/YYYY">
                                 </td>
                             </tr>
                             <tr>
-                                <td><label for="status">Status:</label></td>
+                                <td><label for="promo_status">Status:</label></td>
                                 <td>
                                     <label>
-                                        <input type="radio" name="status" value="ACTIVE" checked>
+                                        <input type="radio" id = "promo_status" name="promo_status" value="ACTIVE" checked>
                                         ACTIVE
                                     </label>
                                 </td>
                                 <td>
                                     <label>
-                                        <input type="radio" name="status" value="INACTIVE">
+                                        <input type="radio" id = "promo_status" name="promo_status" value="INACTIVE">
                                         INACTIVE
                                     </label>
                                 </td>
@@ -129,7 +120,7 @@
                                 <td></td> <!-- Empty cell for spacing -->
                                 <td></td>
                                 <td></td>
-                                <td><button type="button" id="addPromotionButton">Add Promotion</button> </td>
+                                <td><button type="submit">Add Promotion</button> </td>
                             </tr>
                         </tbody>
                     </table>
@@ -139,62 +130,65 @@
     </div>
 </div>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const addPromotionButton = document.getElementById('addPromotionButton');
-        const promoTable = document.querySelector('.content-table tbody');
+    document.getElementById('addPromotionForm').addEventListener('submit', function(event) {
+        event.preventDefault();
 
-        addPromotionButton.addEventListener('click', function () {
-            // Fetch the next available promotion ID from the server
-            fetch('/getNextPromoID')
-                .then(response => response.json())
-                .then(data => {
-                    const nextPromoID = data.nextPromoID;
+        // Get form data
+        const formData = new FormData(this);
 
-                    // Get form input values
-                    const promotionName = document.querySelector('input[name=promotionName]').value;
-                    const promotionDescription = document.querySelector('input[name=promotionDescription]').value;
-                    const pointsCost = document.querySelector('input[name=pointsCost]').value;
-                    const expirationDate = document.querySelector('input[name=manualExpirationDate]').value;
-                    const status = document.querySelector('input[name=status]:checked').value;
-
-                    // Create a new row for the table with the next available ID
-                    const newRow = document.createElement('tr');
-                    newRow.innerHTML = `
-                        <td data-field="promo_id">${nextPromoID}</td>
-                        <td data-field="promo_name">${promotionName}</td>
-                        <td data-field="promo_description">${promotionDescription}</td>
-                        <td data-field="expiration_date">${expirationDate}</td>
-                        <td data-field="promo_status">
-                            <div class="status ${status}">${status}</div>
-                        </td>
-                        <td data-field="promo_cost">${pointsCost}</td>
-                        <td>
-                            <button class="edit-button" onclick="editPromotion('${nextPromoID}')">Edit</button>
-                            <button class="delete-button" onclick="deletePromotion('${nextPromoID}')">Delete</button>
-                        </td>
-                    `;
-
-                    // Append the new row to the table
-                    promoTable.appendChild(newRow);
-
-                    // Clear the form fields
-                    document.getElementById('addPromotionForm').reset();
-                })
-                .catch(error => {
-                    console.error(error);
-                });
+        // Convert form data to JSON
+        const jsonData = {};
+        formData.forEach((value, key) => {
+            if (key === 'exp_date') {
+            // Format the exp_date to 'YYYY-MM-DD' format
+            const dateParts = value.split('/');
+            jsonData[key] = dateParts[2] + '-' + dateParts[0] + '-' + dateParts[1];
+        } else {
+            jsonData[key] = value;
+        }
         });
 
-        // Initialize 'flatpickr' for manualExpirationDate input
-        const manualExpirationDateInput = document.getElementById('manualExpirationDate');
-        const flatpickrInstance = flatpickr(manualExpirationDateInput, {
-            dateFormat: 'm/d/Y',
-            enableTime: false,
+        // Send a POST request to your Flask endpoint
+        fetch('http://127.0.0.1:5000/addpromotion', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(jsonData),
+        })
+        .then(response => response.text())
+        .then(data => {
+        console.log(data);  // Log the response
+        location.reload();  // Reset the form
+    })
+        .catch(error => {
+            console.error('Error:', error);
         });
     });
 </script>
 
-
+<script>
+    function deletePromotion(promotion_id) {
+    console.log(promotion_id);
+    if (confirm('Are you sure you want to delete this promotion?')) {
+        fetch(`http://127.0.0.1:5000/deletepromotion/${promotion_id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.text())
+        .then(data => {
+            console.log(data);  // Log the response
+          // Reload the page after a successful deletion
+          location.reload();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+}
+</script>
 
 </body>
 </html>

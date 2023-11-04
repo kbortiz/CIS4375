@@ -1,6 +1,7 @@
 import flask
 from flask import jsonify
 from flask import request
+from flask_cors import CORS
 from sql import create_connection
 from sql import execute_query
 from sql import execute_read_query
@@ -12,6 +13,7 @@ conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.co
 
 # setting up an application name
 app = flask.Flask(__name__)  # sets up the application
+CORS(app)
 app.config["DEBUG"] = True  # allow to show errors in browser
 
 today = date.today()  # sets today as today's date
@@ -116,20 +118,32 @@ def post_create_promo():
     request_data = request.get_json()  # provids json inputs for the needed data to be inputted
     promoname = request_data['promo_name']
     promodescription = request_data['promo_description']
+    expdate = request_data['exp_date']
     promostatus = request_data['promo_status']
     promocost = request_data['promo_cost']
     if promostatus.upper() == 'ACTIVE':
         deactivate = "UPDATE promotions SET promo_status = 'INACTIVE' WHERE promo_status = 'ACTIVE' "
-        addreview = "INSERT INTO promotions (promo_name, promo_description, promo_status, promo_cost) VALUES ('%s', '%s', UPPER('%s'),%s)" % (
-        promoname, promodescription, promostatus, promocost)
+        addpromo = "INSERT INTO promotions (promo_name, promo_description,exp_date, promo_status, promo_cost) VALUES ('%s', '%s','%s', UPPER('%s'),%s)" % (
+        promoname, promodescription,expdate, promostatus, promocost)
+        execute_query(conn, addpromo)
         execute_query(conn, deactivate)
-        execute_query(conn, addreview)  # executes above query to set given mechanics currentcar to NULL
         return 'Active Promotion added'
     elif promostatus.upper() == 'INACTIVE':
-        addreview = "INSERT INTO promotions (promo_name, promo_description, promo_status, promo_cost) VALUES ('%s', '%s', UPPER('%s'),%s)" % (
-        promoname, promodescription, promostatus, promocost)
-        execute_query(conn, addreview)  # executes above query to add the provided data to table
+        addpromo = "INSERT INTO promotions (promo_name, promo_description, exp_date, promo_status, promo_cost) VALUES ('%s', '%s','%s', UPPER('%s'),%s)" % (
+        promoname, promodescription,expdate, promostatus, promocost)
+        execute_query(conn, addpromo)  # executes above query to add the provided data to table
         return 'Inactive Promotion added'
+    
+
+@app.route('/deletepromotion/<int:promotion_id>', methods=['POST'])  # endpoint to submit a promotion
+def post_delete_promo(promotion_id):
+    conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
+                             "Davi_Nails")
+
+    delete_query = "DELETE FROM promotions WHERE promo_id = '%s'" % (promotion_id)
+    execute_query(conn, delete_query)
+    
+    return 'Promotion deleted successfully'
 
 
 
@@ -153,6 +167,37 @@ def put_updatepromo():
         execute_query(conn, changestatus)  # executes above query to set given mechanics currentcar to NULL
         return 'Promotion set to INACTIVE'
 
+@app.route('/updatepromotion/<int:promotion_id>', methods=['PUT'])
+def update_promotion(promotion_id):
+    try:
+        updated_values = request.get_json()
+        print(updated_values)
+        # Create a database connection
+        conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
+                             "Davi_Nails")
+        cursor = conn.cursor()
 
+        # Construct an SQL UPDATE query to update the promotion based on promotion_id
+        update_query = "UPDATE promotions SET "
+        for key, value in updated_values.items():
+            update_query += f"{key} = '{value}', "
+        update_query = update_query.rstrip(', ')  # Remove the trailing comma
+        update_query += f" WHERE promo_id = {promotion_id}"
+
+        # Execute the UPDATE query
+        cursor.execute(update_query)
+
+        # Commit the changes to the database
+        conn.commit()
+
+        # Close the cursor and connection
+        cursor.close()
+        conn.close()
+
+        # Return a success response
+        return jsonify({'success': True})
+    except Exception as e:
+        # Handle errors, e.g., database errors
+        return jsonify({'success': False, 'error': str(e)})
 
 app.run()

@@ -77,7 +77,7 @@
         });
 
         // Send the updated values to the server via an AJAX request for saving
-        fetch(`/promotion/updatePromotion/${id}`, {
+        fetch(`http://127.0.0.1:5000/updatepromotion/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -86,22 +86,8 @@
         })
         .then(response => response.json())
         .then(data => {
-            if (data.success) {
-                // Update the UI with the saved values
-                fields.forEach(field => {
-                    const fieldName = field.getAttribute('data-field');
-                    
-                    if (fieldName !== 'promo_status') {
-                        field.innerHTML = updatedValues[fieldName];
-                    }
-                });
-
-                // Update the "Status" field
-                const statusField = row.querySelector('td[data-field="promo_status"]');
-                statusField.innerHTML = `<div class="status ${updatedValues.promo_status}">${updatedValues.promo_status}</div>`;
-            } else {
-                // Handle the error
-            }
+            console.log(data);  // Log the response
+            location.reload();  // Reset the form
         })
         .catch(error => {
             // Handle the fetch error
