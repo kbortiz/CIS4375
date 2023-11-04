@@ -8,7 +8,18 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" type="text/css" href="/styles.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>    
+
     <script src="/search_box.js"></script>
+    <script src="/editPromotion.js"></script>
+    <script src="/pageControl.js"></script>
+    <style>
+        td[data-field] input {
+            height: 30px;
+        }
+    </style>
 </head>
 <body>
 <div class="wrapper">
@@ -18,7 +29,7 @@
         <div class="info">
             <div class="table">
                 <section class="table__header">
-                    <h2>Redemption History</h2>
+                    <h2>Promotion</h2>
                     <div class="input-group">
                         <input type="search" id="searchData" name="searchData" placeholder="Search Data...">
                         <i class="fa fa-search" aria-hidden="true"></i>
@@ -40,21 +51,36 @@
                 <tbody>
                     <!-- Use EJS syntax to iterate through promotions and generate table rows -->
                     <% promotions.forEach(promotion => { %>
+<<<<<<< HEAD
                             <td><%= promotion.promo_name %></td>
                             <td><%= promotion.promo_description %></td>
                             <td><%= promotion.expiration_date %></td>
                             <td>
+=======
+                        <tr data-promo-id="<%= promotion.promo_id %>">
+                            <td data-field="promo_id"><%= promotion.promo_id %></td>
+                            <td data-field="promo_name"><%= promotion.promo_name %></td>
+                            <td data-field="promo_description"><%= promotion.promo_description %></td>
+                            <td data-field="expiration_date"><%= promotion.expiration_date %></td>
+                            <td data-field="promo_status">
+>>>>>>> origin/Kim_frontend
                                 <div class="status <%= promotion.promo_status %>"><%= promotion.promo_status %></div>
-                              </td>
-                            <td><%= promotion.promo_cost %></td>
+                            </td>
+                            <td data-field="promo_cost"><%= promotion.promo_cost %></td>
                             <td>
-                                <button class="edit-button" onclick="editPromotion('<%= promotion.id %>')">Edit</button>
-                                <button class="delete-button" onclick="deletePromotion('<%= promotion.id %>')">Delete</button>
+                                <button class="edit-button" onclick="editPromotion('<%= promotion.promo_id %>')">Edit</button>
+                                <button class="delete-button" onclick="deletePromotion('<%= promotion.promo_id %>')">Delete</button>
                             </td>
                         </tr>
                     <% }); %>
                 </tbody>
                 </table>
+                    <!-- Pagination Controls -->
+                <div class="pagination-controls">
+                    <button id="prevPageButton" class="pagination-button">Previous</button>
+                    <span id="currentPage" class="current-page">1</span>
+                    <button id="nextPageButton" class="pagination-button">Next</button>
+                </div>
              </div>
              
              <!-- Adding new promotion form -->
@@ -62,8 +88,8 @@
                 <section class="table__header">
                     <h2>Add New Promotion</h2>
                 </section>
-                <form id="addPromotionForm" action="/addPromotion" method="POST">
-                    <table class="content-table">
+                <form id="addPromotionForm" action="/promotion" method="POST">
+                    <table class="content-form">
                         <tbody>
                             <tr>
                                 <td><label for="promotionName">Promotion Name:</label></td>
@@ -78,13 +104,9 @@
                                 <td>
                                     <input type="text" name="pointsCost" required>
                                 </td>
-                                <td><label for="expirationDate">Expiration Date:</label></td>
+                                <td><label for="expirationDate"><i class="fa fa-calendar" style="color: #000000;"></i> Expiration Date: </label></td>
                                 <td>
-                                    <div class="input-with-calendar">
-                                        <i class="fa fa-calendar" aria-hidden="true"></i> <!-- Calendar icon --> <p>&nbsp</p>
-                                        <input type="text" name="manualExpirationDate" id="manualExpirationDate" placeholder="MM/DD/YYYY">
-                                    </div>
-                                    <input type="date" name="expirationDate" id="expirationDate" style="display: none;" required>
+                                    <input type="text" name="manualExpirationDate" id="manualExpirationDate" placeholder="MM/DD/YYYY">
                                 </td>
                             </tr>
                             <tr>
@@ -107,7 +129,7 @@
                                 <td></td> <!-- Empty cell for spacing -->
                                 <td></td>
                                 <td></td>
-                                <td><button type="button" id="submitPromotion">Add Promotion</button></td>
+                                <td><button type="button" id="addPromotionButton">Add Promotion</button> </td>
                             </tr>
                         </tbody>
                     </table>
@@ -117,29 +139,61 @@
     </div>
 </div>
 <script>
-    document.getElementById('submitPromotion').addEventListener('click', function() {
-        // Get the form data
-        const pointsCost = document.querySelector('[name="pointsCost"]').value;
-        const expirationDate = document.querySelector('[name="expirationDate"]').value;
-        const description = document.querySelector('[name="description"]').value;
-        const status = document.querySelector('[name="status"]').checked ? 'ACTIVE' : 'INACTIVE';
+    document.addEventListener('DOMContentLoaded', function () {
+        const addPromotionButton = document.getElementById('addPromotionButton');
+        const promoTable = document.querySelector('.content-table tbody');
 
-        // Create a new table row
-        const newRow = document.createElement('tr');
-        newRow.innerHTML = `
-            <td>New ID</td>
-            <td>${description}</td>
-            <td>${description}</td>
-            <td>${pointsCost}</td>
-            <td>${expirationDate}</td>
-            <td class="${status}">${status}</td>
-            <td>Edit / Delete</td>
-        `;
+        addPromotionButton.addEventListener('click', function () {
+            // Fetch the next available promotion ID from the server
+            fetch('/getNextPromoID')
+                .then(response => response.json())
+                .then(data => {
+                    const nextPromoID = data.nextPromoID;
 
-        // Append the new row to the table
-        document.querySelector('.content-table tbody').appendChild(newRow);
+                    // Get form input values
+                    const promotionName = document.querySelector('input[name=promotionName]').value;
+                    const promotionDescription = document.querySelector('input[name=promotionDescription]').value;
+                    const pointsCost = document.querySelector('input[name=pointsCost]').value;
+                    const expirationDate = document.querySelector('input[name=manualExpirationDate]').value;
+                    const status = document.querySelector('input[name=status]:checked').value;
+
+                    // Create a new row for the table with the next available ID
+                    const newRow = document.createElement('tr');
+                    newRow.innerHTML = `
+                        <td data-field="promo_id">${nextPromoID}</td>
+                        <td data-field="promo_name">${promotionName}</td>
+                        <td data-field="promo_description">${promotionDescription}</td>
+                        <td data-field="expiration_date">${expirationDate}</td>
+                        <td data-field="promo_status">
+                            <div class="status ${status}">${status}</div>
+                        </td>
+                        <td data-field="promo_cost">${pointsCost}</td>
+                        <td>
+                            <button class="edit-button" onclick="editPromotion('${nextPromoID}')">Edit</button>
+                            <button class="delete-button" onclick="deletePromotion('${nextPromoID}')">Delete</button>
+                        </td>
+                    `;
+
+                    // Append the new row to the table
+                    promoTable.appendChild(newRow);
+
+                    // Clear the form fields
+                    document.getElementById('addPromotionForm').reset();
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        });
+
+        // Initialize 'flatpickr' for manualExpirationDate input
+        const manualExpirationDateInput = document.getElementById('manualExpirationDate');
+        const flatpickrInstance = flatpickr(manualExpirationDateInput, {
+            dateFormat: 'm/d/Y',
+            enableTime: false,
+        });
     });
 </script>
+
 
 
 </body>

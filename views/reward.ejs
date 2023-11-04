@@ -11,7 +11,7 @@
 
     <script src="/piechart.js"></script>
     <script src="/search_box.js"></script>
- 
+    <script src="/pageControl.js"></script>
 
 </head>
 <body>
@@ -38,7 +38,6 @@
                         </div>
                     </section>
 
-
                     <table class="content-table">
                         <thead>
                             <tr>
@@ -63,6 +62,12 @@
                             <% }); %>
                         </tbody>
                     </table>
+                    <!-- Pagination Controls -->
+                    <div class="pagination-controls">
+                        <button id="prevPageButton" class="pagination-button">Previous</button>
+                        <span id="currentPage" class="current-page">1</span>
+                        <button id="nextPageButton" class="pagination-button">Next</button>
+                    </div>
                 </div>
             </div>
         </div>

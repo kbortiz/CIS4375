@@ -395,6 +395,43 @@ thead tr th.active,tbody td.active {
 /*--------------------------------------------------*/
 /* Adding CSS styles for calendar icon for the form */
 /*--------------------------------------------------*/
+.wrapper .main_content .table .content-form {
+  border-collapse: collapse;
+  font-size: 0.9em;
+  width:96%;
+  border-radius: 5px 5px 0 0;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  margin-left: 2%;
+  margin-right: 2%;
+  margin-bottom: 2%;
+}
+
+.content-form thead tr {
+  background-color: #69f9da;
+  color: #000000;
+  text-align: left;
+  font-weight: bold;
+}
+
+.content-form th,
+.content-form td {
+  padding: 12px 15px;
+}
+
+.content-form tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.content-form tbody tr:nth-of-type(even) {
+  background-color: #eeeeee;
+}
+
+.content-form tbody tr:last-of-type {
+  border-bottom: 2px solid #69f9da;
+}
+
+
 
 .input-with-calendar {
   display: flex;
@@ -409,3 +446,33 @@ thead tr th.active,tbody td.active {
   margin-left: 5px; /* Adjust the margin as needed */
 }
 
+
+
+/* Adding the css for page control */
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.pagination-controls button {
+  background-color: #69f9da;
+  color: #000;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  margin: 0 10px; /* Add margin for spacing between buttons */
+}
+
+.pagination-controls #currentPage {
+  font-weight: bold;
+  color: #000;
+  margin: 0 10px; /* Add margin for spacing between buttons */
+}
+
+.pagination-controls button:hover {
+  background-color: #40a347;
+  color: white;
+}

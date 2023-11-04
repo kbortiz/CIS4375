@@ -9,6 +9,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" type="text/css" href="/styles.css">
     <script src="/search_box.js"></script>
+    <script src="/pageControl.js"></script>
 </head>
 <body>
     <div class="wrapper">
@@ -52,6 +53,12 @@
                             <% }); %>
                         </tbody>
                     </table>
+                    <!-- Pagination Controls -->
+                    <div class="pagination-controls">
+                        <button id="prevPageButton" class="pagination-button">Previous</button>
+                        <span id="currentPage" class="current-page">1</span>
+                        <button id="nextPageButton" class="pagination-button">Next</button>
+                    </div>
                 </div>
             </div>
         </div>
