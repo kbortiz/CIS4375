@@ -71,7 +71,7 @@ def api_get_customerpoints():
 def api_get_reviews():
     conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
                              "Davi_Nails")
-    sql = "SELECT CONCAT (ci.first_name,' ', ci.last_name) AS 'Name', rev.rev_date, rev.rev_description, rev.rev_rating FROM customer_information AS ci inner join reviews AS rev ON ci.cust_id = rev.cust_id order by rev.rev_date DESC LIMIT 3;"
+    sql = "SELECT CONCAT (ci.first_name,' ', ci.last_name) AS 'Name', rev.rev_date, rev.rev_description, rev.rev_rating FROM customer_information AS ci inner join reviews AS rev ON ci.cust_id = rev.cust_id order by rev.rev_date DESC;"
     printlogs = execute_read_query(conn, sql)
 
     return jsonify(printlogs)  # Prints all logs
@@ -80,7 +80,7 @@ def api_get_reviews():
 def api_get_activepromos():
     conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
                              "Davi_Nails")
-    sql = "SELECT * FROM promotions WHERE promo_status = 'ACTIVE' ORDER BY promo_cost"
+    sql = "SELECT promo_id, promo_name, promo_description, DATE_FORMAT(exp_date,'%m-%d-%Y'), promo_status, promo_cost FROM promotions WHERE promo_status = 'ACTIVE' ORDER BY promo_cost"
     printlogs = execute_read_query(conn, sql)
 
     return jsonify(printlogs)  # Prints all logs
@@ -89,7 +89,7 @@ def api_get_activepromos():
 def api_get_allpromos():
     conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
                              "Davi_Nails")
-    sql = "SELECT * FROM promotions ORDER BY promo_cost"
+    sql = "select promo_id, promo_name, promo_description, DATE_FORMAT(exp_date,'%m-%d-%Y') as 'exp_date', promo_status, promo_cost from promotions ORDER BY promo_cost"
     printlogs = execute_read_query(conn, sql)
 
     return jsonify(printlogs)  # Prints all logs

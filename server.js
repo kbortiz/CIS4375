@@ -74,6 +74,27 @@ app.get('/redemption-history', (req, res) => {
 });
 
 
+app.get('/reviews', (req, res) => {
+    axios.get(`http://127.0.0.1:5000/allreviews`)
+    .then((rewardresponse) => {
+    var reviews = rewardresponse.data;
+    const averageRating = calculateAverageRating(reviews);
+    res.render('reviews', { reviews:reviews, averageRating});
+    });
+});
+
+app.get('/delete-reviews', (req, res) => {
+    res.render('delete-reviews');
+});
+
+app.get('/customer-information', (req, res) => {
+    axios.get(`http://127.0.0.1:5000/customerinfo`)
+    .then((rewardresponse) => {
+    var customers = rewardresponse.data;
+    res.render('customer-information', { customers:customers});
+    });
+});
+
 // Update the Current Points
 app.put('/reward/updateCurrentPoints/:phoneNumber', (req, res) => {
     const phoneNumber = req.params.phoneNumber;
@@ -90,28 +111,15 @@ app.put('/reward/updateCurrentPoints/:phoneNumber', (req, res) => {
     }
 });
 
-// Update promotions
-app.put('/promotion/updatePromotion/:promoId', (req, res) => {
-    const promoId = req.params.promoId;
-    const updatedPromotion = req.body;
-
-    const promotion = promotions.find((p) => p.promo_id === promoId);
-    if (promotion) {
-        promotion.promo_name = updatedPromotion.promo_name;
-        promotion.promo_description = updatedPromotion.promo_description;
-        promotion.expiration_date = updatedPromotion.expiration_date;
-        promotion.promo_cost = updatedPromotion.promo_cost;
-
-        // Update the promo_status here as well
-        promotion.promo_status = updatedPromotion.promo_status;
-
-        res.json({ success: true, promo_status: updatedPromotion.promo_status }); // Send back the updated status
-    } else {
-        console.error('Promotion not found for promoId: ' + promoId);
-        res.status(404).json({ error: 'Promotion not found' });
+function calculateAverageRating(reviews) {
+    if (reviews.length === 0) {
+        return 0; // If there are no reviews, return 0 as the average rating
     }
-});
 
+    const totalRating = reviews.reduce((sum, review) => sum + review.rev_rating, 0);
+    const averageRating = totalRating / reviews.length;
+    return averageRating.toFixed(2); // Round the average to two decimal places
+}
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);

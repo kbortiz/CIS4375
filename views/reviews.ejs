@@ -53,63 +53,45 @@
     }
 </style>
 <body>
-<div class="wrapper">
-    <%- include('partials/sidebar') %>
-    <div class="main_content">
-        <div class="header">
-            <div class="headerbox" style="text-transform: uppercase;">
-                <h2 class="headerblock1">Customer Reviews</h2>
-                <div class="headerblock2">
-                    <button class="button" onclick="location.href='http://localhost:3000/delete-reviews'">Delete Reviews</button>
-                </div>
-            </div>
-        </div>
-        <div class="container">
 
-            <div class="info">
-                <h1>Average Rating: 4.67 <i class="fas fa-star"></i></h1>
-            </div>
-
-            <div class="info">
-                <div>
-                    <p><i class="fas fa-user"></i>  Joseph Nguyen</p>
-                    
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                    <p>October 16, 2023</p>
-                </div>
-                <br>
-                <div>
-                    <p>This is why I like the nail salon.</p>
+    <div class="wrapper">
+        <%- include('partials/sidebar') %>
+        <div class="main_content">
+            <div class="header">
+                <div class="headerbox" style="text-transform: uppercase;">
+                    <h2 class="headerblock1">Customer Reviews</h2>
+                    <div class="headerblock2">
+                        <button class="button" onclick="location.href='http://localhost:3000/delete-reviews'">Delete Reviews</button>
+                    </div>
                 </div>
             </div>
-
-            <div class="info">
-                <div>
-                    <p><i class="fas fa-user"></i>  Joseph Nguyen</p>
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                    <p>October 16, 2023</p>
+            <div class="container">
+    
+                <div class="info">
+                    <h1>Average Rating: <%= averageRating %> <i class="fas fa-star"></i></h1>
                 </div>
-                <br>
-                <div>
-                    <p>This is why I like the nail salon.</p>
+    
+                <% for (let i = 0; i < reviews.length; i++) { %>
+                <div class="info">
+                    <div>
+                        <p><i class="fas fa-user"></i> <%= reviews[i].Name %></p>
+                        <% for (let j = 0; j < reviews[i].rev_rating; j++) { %>
+                            <i class="fas fa-star"></i>
+                        <% } %>
+                        <p><%= reviews[i].rev_date %></p>
+                    </div>
+                    <br>
+                    <div>
+                        <p><%= reviews[i].rev_description %></p>
+                    </div>
                 </div>
+                <% } %>
+                
             </div>
-
-            <div class="info">
-                <div>
-                    <p><i class="fas fa-user"></i>  Someone Else</p>
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                    <p>October 16, 2023</p>
-                    <!-- Your content here -->
-                </div>
-                <br>
-                <div>
-                    <p>This is why I kind of like the nail salon.</p>
-                </div>
-            </div>
-            
         </div>
     </div>
-</div>
+
+
 </body>
+    
 </html>
