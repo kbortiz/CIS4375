@@ -56,7 +56,7 @@
                                 <td><%= customer.last_name %></td>
                                 <td><%= customer.phone_number %></td>
                                 <td><%= customer.ci_date %></td>
-                                <td class="editable-cell"><%= customer.current_points %></td> <!-
+                                <td class="editable-cell"><%= customer.current_points %></td>
                                 <td><%= customer.lifetime_points %></td>
                             </tr>
                             <% }); %>
@@ -76,7 +76,7 @@
         // Function to send an update request to the server
         async function updateCurrentPoints(phone_number, newPoints) {
             try {
-                const response = await fetch(`/reward/updateCurrentPoints/${phone_number}`, {
+                const response = await fetch(`http://127.0.0.1:5000/updatepoints/${phone_number}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
@@ -106,7 +106,7 @@
                 cell.setAttribute('contentEditable', false);
     
                 // Get the phone number from the parent row
-                const phoneNumber = cell.closest('tr').querySelector('td:nth-child(3)').textContent;
+                const phone_number = cell.closest('tr').querySelector('td:nth-child(3)').textContent;
                 const newPoints = cell.innerText; // Get the new Current Points value
                 updateCurrentPoints(phone_number, newPoints);
             });

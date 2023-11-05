@@ -41,19 +41,42 @@ def api_get_customers():
 
 @app.route('/customercount', methods=['GET'])  # Endpoint to return all customers
 def api_get_customercount():
-    conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
+        
+    try:
+        conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
                              "Davi_Nails")
-    sql = "SELECT COUNT(*) FROM customer_information"
-    printlogs = execute_read_query(conn, sql)
+        cursor = conn.cursor()
 
-    return jsonify(printlogs)  # Prints all logs
+        # Execute the SQL query to get the category counts
+        query = """
+        SELECT COUNT(*) as count
+        FROM customer_points
+        GROUP BY category_id;
+        """
+        cursor.execute(query)
+
+        # Fetch the results
+        results = cursor.fetchall()
+
+        # Create an array to store the category counts
+        category_counts = [result[0] for result in results]
+
+        # Close the cursor and connection
+        cursor.close()
+        conn.close()
+
+        # Return the category counts as JSON
+        return jsonify(category_counts)
+
+    except Exception as e:
+        return jsonify({'error': str(e)})
 
 
 @app.route('/customerinfo', methods=['GET'])  # Endpoint to return all customers
 def api_get_customerinfo():
     conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
                              "Davi_Nails")
-    sql = "select ci.phone_number, ci.last_name, ci.first_name, ci.email, ci.birthday,(select DATE_FORMAT(chk.ci_date, '%m-%d-%Y') FROM check_ins AS chk where ci.cust_id = chk.cust_id order by chk.ci_date DESC LIMIT 1) as 'lastVisit' from customer_information ci order by ci.last_name;"
+    sql = "select ci.phone_number, ci.last_name, ci.first_name, ci.email, DATE_FORMAT(ci.birthday, '%M %d %Y') as 'birthday' ,(select DATE_FORMAT(chk.ci_date, '%M %d %Y') FROM check_ins AS chk where ci.cust_id = chk.cust_id order by chk.ci_date DESC LIMIT 1) as 'lastVisit' from customer_information ci order by ci.last_name;"
     printlogs = execute_read_query(conn, sql)
 
     return jsonify(printlogs)  # Prints all logs
@@ -62,10 +85,28 @@ def api_get_customerinfo():
 def api_get_customerpoints():
     conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
                              "Davi_Nails")
-    sql = "SELECT ci.phone_number, ci.last_name, ci.first_name, cpo.current_points, cpo.lifetime_points, (select DATE_FORMAT(chk.ci_date, '%m-%d-%Y') FROM check_ins AS chk where ci.cust_id = chk.cust_id order by chk.ci_date DESC LIMIT 1) as'ci_date'  FROM customer_information AS ci inner join customer_points AS cpo ON ci.cust_id = cpo.cust_id  order by ci.last_name;"
+    sql = "SELECT ci. cust_id, ci.phone_number, ci.last_name, ci.first_name, cpo.current_points, cpo.lifetime_points, (select DATE_FORMAT(chk.ci_date, '%m-%d-%Y') FROM check_ins AS chk where ci.cust_id = chk.cust_id order by chk.ci_date DESC LIMIT 1) as'ci_date'  FROM customer_information AS ci inner join customer_points AS cpo ON ci.cust_id = cpo.cust_id  order by ci.last_name;"
     printlogs = execute_read_query(conn, sql)
 
     return jsonify(printlogs)  # Prints all logs
+
+@app.route('/updatepoints/<phone_number>', methods=['PUT'])
+def update_current_points(phone_number):
+    try:
+        conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
+                             "Davi_Nails")
+        new_points = request.json['newPoints']
+        get_id = "SELECT cust_ID FROM customer_information WHERE phone_number = '%s'" % (phone_number)
+        cust_id = execute_read_query(conn, get_id)
+        # Update the 'current_points' for the customer with the given phone_number in your MySQL database
+        # Your database update logic here
+        updatepoints = "UPDATE customer_points SET current_points = '%s' WHERE cust_id = '%s' " % (new_points, cust_id[0]['cust_ID'])
+        execute_query(conn, updatepoints)
+        # Return a success response
+        return jsonify({'message': 'Current Points updated successfully'})
+
+    except Exception as e:
+        return jsonify({'error': str(e)})
 
 @app.route('/allreviews', methods=['GET'])  # Endpoint to return all reviews
 def api_get_reviews():
