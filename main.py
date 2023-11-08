@@ -244,6 +244,7 @@ def update_current_points(phone_number):
         get_active = "SELECT promo_id, promo_cost FROM promotions WHERE promo_status = 'ACTIVE'"
         cust_id = execute_read_query(conn, get_id)
         getpromo = execute_read_query(conn, get_active)
+        print(cust_id, getpromo)
         # Update the 'current_points' for the customer with the given phone_number in your MySQL database
         # Your database update logic here
         updatepoints = "UPDATE customer_points SET current_points = '%s' WHERE cust_id = '%s' " % (new_points, cust_id[0]['cust_ID'])

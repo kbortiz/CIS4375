@@ -38,10 +38,10 @@ function saveCurrentPoints(phoneNumber) {
 }
 
 // Function to send an update request to the server
-async function updateCurrentPoints(phoneNumber, newPoints) {
+function updateCurrentPoints(phone_number, newPoints) {
     try {
-        const response = await fetch(`/reward/updateCurrentPoints/${phoneNumber}`, {
-            method: 'PUT',
+        fetch(`http://127.0.0.1:5000/updatepoints/${phone_number}`, {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -50,9 +50,11 @@ async function updateCurrentPoints(phoneNumber, newPoints) {
 
         if (response.ok) {
             console.log('Current Points updated successfully.');
+            location.reload();
         } else {
             console.error('Failed to update Current Points.');
         }
+        
     } catch (error) {
         console.error('Error:', error);
     }
