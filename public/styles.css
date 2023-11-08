@@ -476,3 +476,25 @@ thead tr th.active,tbody td.active {
   background-color: #40a347;
   color: white;
 }
+
+/*-------------------------------*/
+/* adding current points css and button styles*/
+/*-------------------------------*/
+
+
+/* Edit Current Points button styling */
+.edit-button {
+  background-color: #ffd700;
+  color: #000;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+
+/* Hover effect for Edit button */
+.edit-button:hover {
+  background-color: #ffb933;
+}
