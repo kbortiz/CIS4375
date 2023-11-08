@@ -63,6 +63,84 @@ def isAuthenticated(route_function):
     print('Session is authenticated.')
     return decorated_function
 
+@app.route('/check_customer', methods=['POST'])
+def check_customer():
+
+    conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
+                             "Davi_Nails")
+    cursor = conn.cursor(dictionary=True)
+    phone_number = request.form['phone_number']
+
+    try:
+        cursor.execute('SELECT * FROM customer_information WHERE phone_number = %s', (phone_number,))
+        account = cursor.fetchone()
+        if account:
+            get_id = "SELECT cust_ID FROM customer_information WHERE phone_number = '%s'" % (phone_number)
+            cust_id = execute_read_query(conn, get_id)
+            add_points = "UPDATE customer_points SET current_points = current_points + 1, lifetime_points = lifetime_points + 1 WHERE cust_id = %s" %(cust_id[0]['cust_ID'])
+            execute_query(conn, add_points)
+            get_points = "SELECT lifetime_points FROM customer_points WHERE cust_ID = %s" %(cust_id[0]['cust_ID'])
+            lifetimepoints = execute_read_query(conn, get_points)
+            add_checkin = "INSERT INTO check_ins (cust_id, ci_date, ci_count) VALUES (%s, '%s', %s)" % (cust_id[0]['cust_ID'], today, lifetimepoints[0]['lifetime_points'])
+            execute_query(conn, add_checkin)
+            return redirect('http://localhost:3000/checkedin')
+        else:
+            createcustomer = "INSERT INTO customer_information (phone_number) VALUES ('%s')" % (phone_number)
+            execute_query(conn, createcustomer)
+            return redirect('http://localhost:3000/newcheckin')
+    finally:
+        cursor.close()
+        conn.close()
+
+@app.route('/checkedin', methods=['GET'])  # Endpoint to return all customers
+@cross_origin(supports_credentials=True)
+def get_checkedin():
+    conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
+                             "Davi_Nails")
+    sql = "SELECT ci.cust_id, ci.last_name, ci.first_name, cpo.current_points, chk.checkin_id \
+            FROM customer_information AS ci inner join customer_points AS cpo ON ci.cust_id = cpo.cust_id \
+            JOIN check_ins chk ON ci.cust_id = chk.cust_id \
+            order by chk.checkin_id DESC LIMIT 1;"
+    printlogs = execute_read_query(conn, sql)
+
+    return jsonify(printlogs)  # Prints all logs
+
+@app.route('/newcheckin', methods=['GET'])  # Endpoint to return all customers
+@cross_origin(supports_credentials=True)
+def get_newcheckin():
+    conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
+                             "Davi_Nails")
+    sql = "select cust_id from customer_information ORDER BY cust_id DESC LIMIT 1;"
+    printlogs = execute_read_query(conn, sql)
+
+    return jsonify(printlogs)  # Prints all logs
+
+
+@app.route('/addcustomer', methods=['POST'])  # endpoint to submit a review
+def post_add_customer():
+    conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
+                             "Davi_Nails")
+
+    cursor = conn.cursor()
+
+    cust_id = request.form['cust_id']
+    firstname = request.form['first_name']
+    lastname = request.form['last_name']
+
+    addcustomer = "UPDATE customer_information SET first_name = %s, last_name = %s WHERE cust_id = %s"
+    values = (firstname, lastname, cust_id)
+    cursor.execute(addcustomer, values)  # executes above query to add the provided data to table
+
+    add_points = "INSERT INTO customer_points VALUES(%s, 1, 1, 1)" %(cust_id)
+    execute_query(conn, add_points)
+    add_checkin = "INSERT INTO check_ins (cust_id, ci_date, ci_count) VALUES (%s, '%s', 1)" % (cust_id, today)
+    execute_query(conn, add_checkin)
+
+
+    conn.commit()
+    conn.close()
+    return redirect('http://localhost:3000/thankyou')
+
 @app.route('/login', methods=['POST'])
 @cross_origin(supports_credentials=True)
 def login():
@@ -182,7 +260,7 @@ def update_current_points(phone_number):
 def api_get_reviews():
     conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
                              "Davi_Nails")
-    sql = "SELECT rev.review_id, CONCAT (ci.first_name,' ', ci.last_name) AS 'Name', rev.rev_date, rev.rev_description, rev.rev_rating FROM customer_information AS ci inner join reviews AS rev ON ci.cust_id = rev.cust_id order by rev.rev_date DESC;"
+    sql = "SELECT rev.review_id, CONCAT (ci.first_name,' ', ci.last_name) AS 'Name', rev.rev_date, rev.rev_description, rev.rev_rating FROM customer_information AS ci inner join reviews AS rev ON ci.cust_id = rev.cust_id order by rev.review_id DESC;"
     printlogs = execute_read_query(conn, sql)
 
     return jsonify(printlogs)  # Prints all logs
@@ -232,16 +310,13 @@ def post_create_review():
     conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
                              "Davi_Nails")
 
-    request_data = request.get_json()  # provids json inputs for the needed data to be inputted
-    customerphone = request_data['phone_number']
-    revdescription = request_data['rev_description']
-    revrating = request_data['rev_rating']
-    get_id = "SELECT cust_ID FROM customer_information WHERE phone_number = '%s'" % (customerphone)
-    cust_id = execute_read_query(conn, get_id)
+    cust_id = request.form['cust_id']
+    revdescription = request.form['rev_description']
+    revrating = request.form['rev_rating']
     addreview = "INSERT INTO reviews (cust_ID, rev_date, rev_description, rev_rating) VALUES (%s, '%s', '%s',%s)" % (
-    cust_id[0]['cust_ID'], today, revdescription, revrating)
+    cust_id, today, revdescription, revrating)
     execute_query(conn, addreview)  # executes above query to add the provided data to table
-    return 'Thank You for the Review!'
+    return redirect('http://localhost:3000/thankyou')
 
 @app.route('/addpromotion', methods=['POST'])  # endpoint to submit a promotion
 def post_create_promo():

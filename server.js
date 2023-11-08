@@ -30,6 +30,39 @@ app.get('/login', (req, res) => {
     res.render('login');
 });
 
+app.get('/checkedin', (req, res) => {
+
+    axios.get(`http://127.0.0.1:5000/checkedin`,{
+     withCredentials: true  // Include cookies for authentication
+ })
+    .then((rewardresponse) => {
+     var customers = rewardresponse.data;
+     res.render('checkedin', { customers:customers});
+     })
+     .catch((error) => {
+         console.error('Axios error:', error);
+         // Handle the error, e.g., by displaying an error message to the user
+     });
+ });
+
+ app.get('/newcheckin', (req, res) => {
+    axios.get(`http://127.0.0.1:5000/newcheckin`,{
+     withCredentials: true  // Include cookies for authentication
+ })
+    .then((rewardresponse) => {
+     var customers = rewardresponse.data;
+     res.render('newcheckin', { customers:customers});
+     })
+     .catch((error) => {
+         console.error('Axios error:', error);
+         // Handle the error, e.g., by displaying an error message to the user
+     });
+});
+
+app.get('/thankyou', (req, res) => {
+    res.render('thank-you');
+});
+
 app.post('/login', [
     body('username').notEmpty().withMessage('Username is required'),
     body('password').notEmpty().withMessage('Password is required'),

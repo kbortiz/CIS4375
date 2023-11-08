@@ -15,16 +15,16 @@
                 <div class="card">
                     <div class="card-header">New Check-in</div>
                     <div class="card-body">
-                        <form action="/register-customer" method="POST">
+                        <form action="http://127.0.0.1:5000/addcustomer" method="POST">
                             <div class="form-group">
-                                <label for="firstName">First Name:</label>
-                                <input type="text" class="form-control" id="firstName" name="firstName" required>
+                                <label for="first_name">First Name:</label>
+                                <input type="text" class="form-control" id="first_name" name="first_name" required>
                             </div>
                             <div class="form-group">
-                                <label for="lastName">Last Name:</label>
-                                <input type="text" class="form-control" id="lastName" name="lastName" required>
+                                <label for="last_name">Last Name:</label>
+                                <input type="text" class="form-control" id="last_name" name="last_name" required>
                             </div>
-                            <input type="hidden" name="phoneNumber" value="<%= phoneNumber %>">
+                            <input type="hidden" id="cust_id" name="cust_id" value= "<%= customers[0].cust_id %>">
                             <button type="submit" class="register-button">Register</button>
                         </form>
                     </div>
@@ -32,5 +32,31 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.getElementById('addReviewForm').addEventListener('submit', function(event) {
+            event.preventDefault()
+    
+            // Get form data
+            const formData = new FormData(this);
+    
+    
+            // Send a POST request to your Flask endpoint
+            fetch('http://127.0.0.1:5000/addcustomer', {
+                method: 'POST',
+                credentials: 'include',  // Include cookies for authentication
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+            console.log(data);  // Log the response
+            location.reload();  // Reset the form
+        })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+
 </body>
 </html>

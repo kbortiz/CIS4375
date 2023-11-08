@@ -15,10 +15,10 @@
                 <div class="card">
                     <div class="card-header">Check-In</div>
                     <div class="card-body">
-                        <form action="http://127.0.0.1:5000/check-in" method="POST"> <!-- Make sure the 'action' points to /check-in -->
+                        <form action="http://127.0.0.1:5000/check_customer" method="POST"> <!-- Make sure the 'action' points to /check-in -->
                             <div class="form-group">
-                                <label for="phoneNumber">Phone Number:</label>
-                                <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" required>
+                                <label for="phone_number">Phone Number:</label>
+                                <input type="text" class="form-control" id="phone_number" name="phone_number" required>
                             </div>
                             <button type="submit" class="btn btn-primary login-button">Check In</button>
                         </form>
@@ -27,5 +27,33 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', function (event) {
+        event.preventDefault();  // Prevent the default form submission
+    
+        const formData = new FormData(this);  // Get form data
+    
+        fetch('http://127.0.0.1:5000/check_customer', {
+            method: 'POST',
+            credentials: 'include',  // Include cookies for authentication
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.account) {
+                // Redirect to /rewards on successful login
+                window.location.href = '/rewards';
+            } else {
+                window.location.href = '/newcheckin';
+            }
+        })
+        .catch(error => {
+            // Handle errors
+        });
+    });
+    
+    </script>
+
 </body>
 </html>

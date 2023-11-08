@@ -88,7 +88,7 @@
         .then(data => {
             console.log(data);  // Log the response
             location.reload();  // Reset the form
-        },2000)
+        })
         .catch(error => {
             // Handle the fetch error
         });
