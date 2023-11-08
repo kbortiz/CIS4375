@@ -12,6 +12,7 @@
     <script src="/piechart.js"></script>
     <script src="/search_box.js"></script>
     <script src="/pageControl.js"></script>
+    <script src="/editCurrentPoints.js"></script>
 
 </head>
 <body>
@@ -47,6 +48,7 @@
                                 <th>Last Visited Date <span class="icon-arrow">&#11014;</span></th>
                                 <th>Current Points <span class="icon-arrow">&#11014;</span></th>
                                 <th>Lifetime Points <span class="icon-arrow">&#11014;</span></th>
+                                <th>Edit Current Points</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -56,8 +58,11 @@
                                     <td><%= customer.lastName %></td>
                                     <td><%= customer.phoneNumber %></td>
                                     <td><%= customer.lastVisit %></td>
-                                    <td class="editable-cell"><%= customer.currentPoints %></td> <!-- Add class for editable cells -->
+                                    <td><%= customer.currentPoints %></td>
                                     <td><%= customer.lifetimePoints %></td>
+                                    <td>
+                                        <button class="edit-button" onclick="editCurrentPoints('<%= customer.phoneNumber %>')">Edit</button>
+                                    </td>
                                 </tr>
                             <% }); %>
                         </tbody>
