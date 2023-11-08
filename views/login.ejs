@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">    
+    <link rel="stylesheet" href="/public/styles.css">
+    
+</head>
+<link rel="stylesheet" type="text/css" href="/styles.css">
+<body>
+    <div class="wrapper">
+        <%- include('partials/sidebar') %>
+    </div>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">Login</div>
+                    <div class="card-body">
+                        <form action="http://127.0.0.1:5000/login" method="POST">
+                            <div class="form-group">
+                                <label for="username">Username:</label>
+                                <input type="text" class="form-control" id="username" name="username" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password:</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary login-button">Login</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    document.getElementById('login-form').addEventListener('submit', function (event) {
+    event.preventDefault();  // Prevent the default form submission
+
+    const formData = new FormData(this);  // Get form data
+
+    fetch('http://127.0.0.1:5000/login', {
+        method: 'POST',
+        credentials: 'include',  // Include cookies for authentication
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.logged_in) {
+            // Redirect to /rewards on successful login
+            window.location.href = '/rewards';
+        } else {
+            location.reload();
+        }
+    })
+    .catch(error => {
+        // Handle errors
+    });
+});
+
+</script>
+
+
+</body>
+</html>
+

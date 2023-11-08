@@ -77,7 +77,7 @@
         async function updateCurrentPoints(phone_number, newPoints) {
             try {
                 const response = await fetch(`http://127.0.0.1:5000/updatepoints/${phone_number}`, {
-                    method: 'PUT',
+                    method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
@@ -86,9 +86,11 @@
     
                 if (response.ok) {
                     console.log('Current Points updated successfully.');
+                    location.reload();
                 } else {
                     console.error('Failed to update Current Points.');
                 }
+                
             } catch (error) {
                 console.error('Error:', error);
             }

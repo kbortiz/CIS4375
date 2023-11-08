@@ -1,7 +1,8 @@
 import flask
-from flask import jsonify
-from flask import request
-from flask_cors import CORS
+from flask import jsonify, request, session, redirect, url_for
+from flask_session import Session
+from flask_cors import CORS, cross_origin
+from flask_sqlalchemy import SQLAlchemy
 from sql import create_connection
 from sql import execute_query
 from sql import execute_read_query
@@ -13,8 +14,22 @@ conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.co
 
 # setting up an application name
 app = flask.Flask(__name__)  # sets up the application
-CORS(app)
+CORS(app, resources={r"*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
 app.config["DEBUG"] = True  # allow to show errors in browser
+
+# Configure SQLAlchemy for session storage
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://admin:password@cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com/Davi_Nails'  # Use your preferred database
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Configure the session
+app.config['SESSION_TYPE'] = 'sqlalchemy'
+app.config['SESSION_USE_SIGNER'] = True
+app.config['SESSION_PERMANENT'] = False
+
+
+
+app.secret_key = 'secretkey'
+db = SQLAlchemy(app)
 
 today = date.today()  # sets today as today's date
 
@@ -29,6 +44,54 @@ authorizedusers = [
     },
 ]
 
+@app.route('/set/<value>')
+def set_session(value):
+    session['value'] = value
+    return f'The value you set is : {value}'
+
+@app.route('/get')
+def get_session():
+    return f'The value in the session is : {session.get("value")}'
+
+# Custom middleware to check if the user is authenticated
+def isAuthenticated(route_function):
+    def decorated_function(*args, **kwargs):
+        if not session.get('logged_in'):
+            print('Session is not authenticated.')
+            return redirect('http://localhost:3000/login')  # Redirect to the login page or another route
+        return route_function(*args, **kwargs)
+    print('Session is authenticated.')
+    return decorated_function
+
+@app.route('/login', methods=['POST'])
+@cross_origin(supports_credentials=True)
+def login():
+
+    conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
+                             "Davi_Nails")
+    cursor = conn.cursor()
+
+    username = request.form['username']
+    password = request.form['password']
+
+    cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
+    user = cursor.fetchone()
+    cursor.close()
+
+    if user and user[2] == password:
+        # Successful login
+        session['logged_in'] = True
+        return redirect('http://localhost:3000/reward')
+    else:
+        return jsonify({'error': 'Invalid username or password'}), 401
+
+    
+@app.route('/check_login_status')
+def check_login_status():
+    if not session.get('logged_in'):
+        return jsonify({'logged_in': False})
+    else:
+        return jsonify({'logged_in': True})
 
 @app.route('/customers', methods=['GET'])  # Endpoint to return all customers
 def api_get_customers():
@@ -73,6 +136,8 @@ def api_get_customercount():
 
 
 @app.route('/customerinfo', methods=['GET'])  # Endpoint to return all customers
+@cross_origin(supports_credentials=True)
+@isAuthenticated
 def api_get_customerinfo():
     conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
                              "Davi_Nails")
@@ -82,6 +147,7 @@ def api_get_customerinfo():
     return jsonify(printlogs)  # Prints all logs
 
 @app.route('/customerpoints', methods=['GET'])  # Endpoint to return all customers
+@cross_origin(supports_credentials=True)
 def api_get_customerpoints():
     conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
                              "Davi_Nails")
@@ -90,18 +156,22 @@ def api_get_customerpoints():
 
     return jsonify(printlogs)  # Prints all logs
 
-@app.route('/updatepoints/<phone_number>', methods=['PUT'])
+@app.route('/updatepoints/<phone_number>', methods=['POST'])
 def update_current_points(phone_number):
     try:
         conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
                              "Davi_Nails")
         new_points = request.json['newPoints']
         get_id = "SELECT cust_ID FROM customer_information WHERE phone_number = '%s'" % (phone_number)
+        get_active = "SELECT promo_id, promo_cost FROM promotions WHERE promo_status = 'ACTIVE'"
         cust_id = execute_read_query(conn, get_id)
+        getpromo = execute_read_query(conn, get_active)
         # Update the 'current_points' for the customer with the given phone_number in your MySQL database
         # Your database update logic here
         updatepoints = "UPDATE customer_points SET current_points = '%s' WHERE cust_id = '%s' " % (new_points, cust_id[0]['cust_ID'])
         execute_query(conn, updatepoints)
+        updateredemption = "INSERT INTO redemption_history (cust_ID, promo_id, promo_cost, redemption_date) VALUES(%s, %s, %s, '%s')" % (cust_id[0]['cust_ID'], getpromo[0]['promo_id'], getpromo[0]['promo_cost'], today)
+        execute_query(conn, updateredemption)
         # Return a success response
         return jsonify({'message': 'Current Points updated successfully'})
 
@@ -112,10 +182,19 @@ def update_current_points(phone_number):
 def api_get_reviews():
     conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
                              "Davi_Nails")
-    sql = "SELECT CONCAT (ci.first_name,' ', ci.last_name) AS 'Name', rev.rev_date, rev.rev_description, rev.rev_rating FROM customer_information AS ci inner join reviews AS rev ON ci.cust_id = rev.cust_id order by rev.rev_date DESC;"
+    sql = "SELECT rev.review_id, CONCAT (ci.first_name,' ', ci.last_name) AS 'Name', rev.rev_date, rev.rev_description, rev.rev_rating FROM customer_information AS ci inner join reviews AS rev ON ci.cust_id = rev.cust_id order by rev.rev_date DESC;"
     printlogs = execute_read_query(conn, sql)
 
     return jsonify(printlogs)  # Prints all logs
+
+@app.route('/deletereview/<int:review_id>', methods=['POST'])  # endpoint to delete a review
+def delete_review(review_id):
+    conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
+                             "Davi_Nails")
+
+    del_rev = "DELETE FROM reviews WHERE review_id = '%s'" % (review_id)
+    execute_query(conn, del_rev)  # executes above query to delete data from the table
+    return 'Review Removed!'
 
 @app.route('/activepromos', methods=['GET'])  # Endpoint to return currently active promotions
 def api_get_activepromos():
@@ -125,6 +204,19 @@ def api_get_activepromos():
     printlogs = execute_read_query(conn, sql)
 
     return jsonify(printlogs)  # Prints all logs
+
+
+@app.route('/redemptionhistory', methods=['GET'])
+def get_redemption_history():
+    conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password", "Davi_Nails")
+    sql = "SELECT ci.first_name, ci.last_name, p.promo_name, p.promo_cost, rh.redemption_date, cpo.current_points, cpo.lifetime_points " \
+        "FROM redemption_history rh " \
+        "JOIN customer_information ci ON rh.cust_id = ci.cust_ID " \
+        "JOIN customer_points cpo ON cpo.cust_id = ci.cust_id " \
+        "JOIN promotions p ON rh.promo_id = p.promo_ID " \
+        "ORDER BY rh.redemption_date DESC"
+    redemption_history = execute_read_query(conn, sql)
+    return jsonify(redemption_history)   
 
 @app.route('/allpromos', methods=['GET'])  # Endpoint to return all promotions
 def api_get_allpromos():
@@ -212,27 +304,32 @@ def put_updatepromo():
 def update_promotion(promotion_id):
     try:
         updated_values = request.get_json()
+        newname = updated_values['promo_name']
+        newdesc = updated_values['promo_description']
+        newdate = updated_values['exp_date']
+        newstatus = updated_values['promo_status']
+        newcost = updated_values['promo_cost']
+
+        print(newstatus)
         print(updated_values)
         # Create a database connection
         conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
                              "Davi_Nails")
         cursor = conn.cursor()
+        update_query = "UPDATE promotions SET promo_name = %s, promo_description = %s, exp_date = %s, promo_status = %s, promo_cost = %s WHERE promo_id = %s"
+        values = (newname, newdesc, newdate, newstatus, newcost, promotion_id)
+    
 
-        # Construct an SQL UPDATE query to update the promotion based on promotion_id
-        update_query = "UPDATE promotions SET "
-        for key, value in updated_values.items():
-            update_query += f"{key} = '{value}', "
-        update_query = update_query.rstrip(', ')  # Remove the trailing comma
-        update_query += f" WHERE promo_id = {promotion_id}"
-
-        # Execute the UPDATE query
-        cursor.execute(update_query)
-
-        # Commit the changes to the database
-        conn.commit()
+        if newstatus.upper() == 'ACTIVE':
+            deactivate = "UPDATE promotions SET promo_status = 'INACTIVE' WHERE promo_status = 'ACTIVE' "
+            execute_query(conn, deactivate)
+            cursor.execute(update_query, values)
+            conn.commit()
+        elif newstatus.upper() == 'INACTIVE':
+            cursor.execute(update_query, values)
+            conn.commit()
 
         # Close the cursor and connection
-        cursor.close()
         conn.close()
 
         # Return a success response

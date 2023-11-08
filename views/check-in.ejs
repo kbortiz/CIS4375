@@ -2,18 +2,30 @@
 <html>
 <head>
     <title>Check-In</title>
-    <link rel="stylesheet" type="text/css" href="/styles.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/public/styles.css">
 </head>
 <body>
-<div class="wrapper">
-    <%- include('partials/sidebar') %>
-    <div class="main_content">
-        <div class="header" style="text-transform: uppercase;"><h2>Customer Check-In</h2></div>
-        <div class="info">
-            <div>Customer check in go here</div>
-            <!-- Your content here -->
+    <div class="wrapper">
+        <%- include('partials/sidebar') %>
+    </div>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">Check-In</div>
+                    <div class="card-body">
+                        <form action="http://127.0.0.1:5000/check-in" method="POST"> <!-- Make sure the 'action' points to /check-in -->
+                            <div class="form-group">
+                                <label for="phoneNumber">Phone Number:</label>
+                                <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary login-button">Check In</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 </body>
 </html>

@@ -41,14 +41,14 @@
                         </thead>
                         <tbody>
                             <% customers.forEach(function(customer) { %>
-                                <tr data-lifetime-points="<%= customer.lifetimePoints %>">
-                                    <td><%= customer.firstName %></td>
-                                    <td><%= customer.lastName %></td>
-                                    <td><%= customer.phoneNumber %></td>
-                                    <td><%= customer.redemptionDate %></td>
+                                <tr data-lifetime-points="<%= customer.lifetime_points %>">
+                                    <td><%= customer.first_name %></td>
+                                    <td><%= customer.last_name %></td>
+                                    <td><%= customer.phone_number %></td>
+                                    <td><%= customer.redemption_date %></td>
                                     <td><%= customer.promo_name %></td>
-                                    <td><%= customer.pointsUsed %></td>
-                                    <td><%= customer.currentPoints %></td>
+                                    <td><%= customer.promo_cost %></td>
+                                    <td><%= customer.current_points %></td>
                                 </tr>
                             <% }); %>
                         </tbody>
