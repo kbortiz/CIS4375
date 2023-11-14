@@ -4,6 +4,36 @@ const port = 3000;
 const { body, validationResult } = require('express-validator');
 const session = require('express-session');
 const ejs = require('ejs');
+const axios = require('axios');
+const { response } = require('express');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+
+const users = [{ username: 'user', password: 'password' }];
+
+passport.use(new LocalStrategy(
+    (username, password, done) => {
+        const user = users.find(u => u.username === username && u.password === password);
+        if (user) {
+            return done(null, user);
+        }
+        return done(null, false, { message: 'Incorrect username or password' });
+    }
+));
+
+passport.serializeUser((user, done) => {
+    done(null, user.username);
+});
+
+passport.deserializeUser((username, done) => {
+    const user = users.find(u => u.username === username);
+    if (user) {
+        done(null, user);
+    } else {
+        done(null, false);
+    }
+});
+
 
 
 app.use(session({
@@ -21,7 +51,8 @@ app.use(express.static(__dirname));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
-
+app.use(passport.initialize());
+app.use(passport.session());
 
 const customers = [
     {
@@ -78,6 +109,13 @@ const promotions = [
 
 let nextPromoId = (promotions.length + 1).toString(); // Track the next available promotion ID
 
+function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next(); // User is authenticated, proceed
+    }
+    res.redirect('/login'); // User is not authenticated, redirect to login page
+}
+
 
 // Define a middleware to set the currentUrl for all routes
 app.use((req, res, next) => {
@@ -87,32 +125,30 @@ app.use((req, res, next) => {
 
 
 app.get('/', (req, res) => {
-    res.render('check-in');
+    const menuItems = [
+        { url: '/', label: 'Check-In', icon: 'fas fa-home' },
+        { url: '/reward', label: 'Reward', icon: 'fas fa-gift' },
+        { url: '/reviews', label: 'Reviews', icon: 'fas fa-quote-right' },
+        { url: '/login', label: 'Log-In', icon: 'fas fa-user' }
+    ];
+    res.render('check-in', { authenticated: req.isAuthenticated() });
 });
+
+
 
 app.get('/login', (req, res) => {
     res.render('login');
   });
   
 
-app.post('/login', [
-    body('username').notEmpty().withMessage('Username is required'),
-    body('password').notEmpty().withMessage('Password is required'),
-  ], (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.render('login', { errors: errors.array() });
-    }
+app.post('/login', passport.authenticate('local', {
+    successRedirect: '/reward', // Redirect upon successful login
+    failureRedirect: '/login',  // Redirect upon failed login
+    failureFlash: true          // Enable flash messages for failed authentication
+}));
   
-    const { username, password } = req.body;
-  
-    if (username === 'user' && password === 'password') {
-      req.session.authenticated = true;
-      res.redirect('/reward');
-    } else {
-      return res.render('login', { error: 'Invalid username or password' });
-    }
-});
+
+
 
 app.post('/check-in', (req, res) => {
     const phoneNumber = req.body.phoneNumber;
@@ -128,6 +164,35 @@ app.post('/check-in', (req, res) => {
         res.render('newcheckin', { phoneNumber });
     }
 });
+
+app.get('/newcheckin', (req, res) => {
+    const menuItems = [
+        { url: '/', label: 'Check-In', icon: 'fas fa-home' },
+        { url: '/reward', label: 'Reward', icon: 'fas fa-gift' },
+        { url: '/reviews', label: 'Reviews', icon: 'fas fa-quote-right' },
+        { url: '/login', label: 'Log-In', icon: 'fas fa-user' }
+    ];
+
+    const currentUrl = '/newcheckin';
+
+    const phoneNumber = '';
+
+    res.render('newcheckin', { menuItems, currentUrl, phoneNumber });
+});
+
+app.get('/checkedin', (req, res) => {
+    const menuItems = [
+        { url: '/', label: 'Check-In', icon: 'fas fa-home' },
+        { url: '/reward', label: 'Reward', icon: 'fas fa-gift' },
+        { url: '/reviews', label: 'Reviews', icon: 'fas fa-quote-right' },
+        { url: '/login', label: 'Log-In', icon: 'fas fa-user' }
+    ];
+
+    const currentUrl = '/checkedin'; // Replace with the current URL if needed
+
+    res.render('checkedin', { menuItems, currentUrl });
+});
+
 
 // Handle the form submission for new customer registration
 app.post('/register-customer', (req, res) => {
@@ -148,16 +213,18 @@ app.post('/register-customer', (req, res) => {
     res.render('checkedin', { customerName, currentPoints });
 });
 
+
+
 app.post('/rate-visit', (req, res) => {
     const { rating, comment } = req.body;
 
-    res.render('thank-you'); // You should create a "thank-you.ejs" template
+    res.render('thank-you'); // to render a page asking for a review
 });
 
 
 
 
-app.get('/reward', (req, res) => {
+app.get('/reward', isLoggedIn, (req, res) => {
     const currentPage = 1; // Set the current page here
     const totalItems = customers.length;
     const itemsPerPage = 25; // Define itemsPerPage
@@ -166,7 +233,7 @@ app.get('/reward', (req, res) => {
 });
 
 
-app.get('/promotion', (req, res) => {
+app.get('/promotion', isLoggedIn, (req, res) => {
     res.render('promotion',{ promotions });
 });
 
@@ -202,7 +269,7 @@ app.get('/getNextPromoID', (req, res) => {
 });
 
 // Get Redemption History Page
-app.get('/redemption-history', (req, res) => {
+app.get('/redemption-history', isLoggedIn, (req, res) => {
     const customers = [
         {
             firstName: 'Peter',
@@ -275,6 +342,20 @@ app.put('/promotion/updatePromotion/:promoId', (req, res) => {
 });
   
 
+
+app.get('/customer-information', (req, res) => {
+    axios.get('http://127.0.0.1:5000/customerinfo', {
+        withCredentials: true  // Include cookies for authentication
+    })
+    .then((rewardresponse) => {
+    var customers = rewardresponse.data;
+    res.render('customer-information', { customers:customers});
+    })
+    .catch((error) => {
+        console.error('Axios error:', error);
+        // Handle the error, e.g., by displaying an error message to the user
+    });
+});
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);

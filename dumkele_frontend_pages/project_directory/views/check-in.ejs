@@ -6,22 +6,52 @@
     <link rel="stylesheet" href="/public/styles.css">
 </head>
 <body>
-    <div class="wrapper">
-        <%- include('partials/sidebar') %>
-    </div>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">Check-In</div>
-                    <div class="card-body">
-                        <form action="/check-in" method="POST"> <!-- Make sure the 'action' points to /check-in -->
-                            <div class="form-group">
-                                <label for="phoneNumber">Phone Number:</label>
-                                <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" required>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar column -->
+            <div class="col-md-3">
+                <div class="wrapper">
+                    <%- include('partials/sidebar') %>
+                </div>
+            </div>
+
+            <!-- Main content column -->
+            <div class="col-md-9">
+                <header class="text-center mb-4">
+                    <img src="/images/davinail.png" alt="DaVi Nail Logo" width="250" height="140">
+                    <h1>Welcome to Davi Nail!</h1>
+                </header>
+
+                <!-- Check-In form -->
+                <div class="container mt-5">
+                    <div class="row justify-content-center">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">Check-In</div>
+                                <div class="card-body">
+                                    <form action="/check-in" method="POST">
+                                        <div class="form-group">
+                                            <label for="phoneNumber">Phone Number:</label>
+                                            <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary login-button">Check In</button>
+                                    </form>
+                                </div>
                             </div>
-                            <button type="submit" class="btn btn-primary login-button">Check In</button>
-                        </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container mt-3">
+                    <div class="row justify-content-center">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">Current Promotion</div>
+                                <div class="card-body">
+                                    <p><strong>20% off one appointment</strong> </p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

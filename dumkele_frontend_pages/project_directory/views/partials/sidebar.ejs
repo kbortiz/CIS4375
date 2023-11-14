@@ -12,3 +12,23 @@
         <li class="bottom-link <%= currentUrl === '/login' ? 'active' : '' %>"><a href="/login"><i class="fas fa-user"></i>Log-In</a></li>
     </ul>
 </div>
+<script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+
+<div class="sidebar">
+    <h2><i class="fas fa-bars"></i> Menu</h2>
+    <ul>
+        <li class="<%= currentUrl === '/' ? 'active' : '' %>"><a href="/"><i class="fas fa-home"></i>Check-In</a></li>
+        <li class="<%= currentUrl === '/reward' ? 'active' : '' %>"><a href="/reward"><i class="fas fa-gift"></i>Reward</a></li>
+        <li class="<%= currentUrl === '/promotion' ? 'active' : '' %>"><a href="/promotion"><i class="fas fa-tags"></i>Promotion</a></li>
+        <li class="<%= currentUrl === '/redemption-history' ? 'active' : '' %>"><a href="/redemption-history"><i class="fas fa-history"></i>Redemption History</a></li>
+        <li class="<%= currentUrl === '/reviews' ? 'active' : '' %>"><a href="/reviews"><i class="fas fa-quote-right"></i>Reviews</a></li>
+        <li class="<%= currentUrl === '/customer-information' ? 'active' : '' %>"><a href="/customer-information"><i class="fas fa-user"></i>Customer Information</a></li>
+    </ul>
+    <ul>
+        <li class="bottom-link <%= currentUrl === '/login' ? 'active' : '' %>"><a href="/login"><i class="fas fa-user"></i>Log-In</a></li>
+    </ul>
+</div>
+
+
+
+
