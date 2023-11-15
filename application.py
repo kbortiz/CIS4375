@@ -14,7 +14,7 @@ conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.co
 
 # setting up an application name
 application = flask.Flask(__name__)  # sets up the application
-CORS(application,resources={r"*": {"origins": "http://localhost:3000"}}, supports_credentials=True, expose_headers=["Content-Type", "Authorization"])
+CORS(application,resources={r"*": {"origins": "http://ec2-18-218-184-140.us-east-2.compute.amazonaws.com"}}, supports_credentials=True, expose_headers=["Content-Type", "Authorization"])
 application.config["DEBUG"] = True  # allow to show errors in browser
 
 today = date.today()  # sets today as today's date
@@ -30,24 +30,7 @@ authorizedusers = [
     },
 ]
 
-@application.route('/set/<value>')
-def set_session(value):
-    session['value'] = value
-    return f'The value you set is : {value}'
 
-@application.route('/get')
-def get_session():
-    return f'The value in the session is : {session.get("value")}'
-
-# Custom middleware to check if the user is authenticated
-def isAuthenticated(route_function):
-    def decorated_function(*args, **kwargs):
-        if not session.get('logged_in'):
-            print('Session is not authenticated.')
-            return redirect('http://localhost:3000/login')  # Redirect to the login page or another route
-        return route_function(*args, **kwargs)
-    print('Session is authenticated.')
-    return decorated_function
 
 @application.route('/checkinpromo', methods=['GET'])  # Endpoint to return all customers
 @cross_origin(supports_credentials=True)
@@ -87,11 +70,11 @@ def check_customer():
             elif lifetimepoints[0]['lifetime_points'] > 20:
                 changecategory = "UPDATE customer_points SET category_id = 4 WHERE cust_id = %s" % (cust_id[0]['cust_ID'])
                 execute_query(conn, changecategory)
-            return redirect('http://localhost:3000/checkedin')
+            return redirect('http://ec2-18-218-184-140.us-east-2.compute.amazonaws.com/checkedin')
         else:
             createcustomer = "INSERT INTO customer_information (phone_number) VALUES ('%s')" % (phone_number)
             execute_query(conn, createcustomer)
-            return redirect('http://localhost:3000/newcheckin')
+            return redirect('http://ec2-18-218-184-140.us-east-2.compute.amazonaws.com/newcheckin')
     finally:
         cursor.close()
         conn.close()
@@ -152,43 +135,9 @@ def post_add_customer():
 
     conn.commit()
     conn.close()
-    return redirect('http://localhost:3000/thankyou')
-
-@application.route('/login', methods=['POST'])
-def login():
-    conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password", "Davi_Nails")
-    cursor = conn.cursor()
-
-    username = request.form['username']
-    password = request.form['password']
-
-    cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
-    user = cursor.fetchone()
-    cursor.close()
-
-    if user and user[2] == password:
-        token = jwt.encode({'user': username}, application.config['SECRET_KEY'], algorithm='HS256')
-        
-        return jsonify({'token': token})
-    else:
-        flash('Invalid username or password')
-        return redirect(url_for('login'))  # Redirect back to the login page
-    
-@application.route('/protected')
-def protected():
-    if 'logged_in' in session:
-        return f"Welcome, {session['username']}, to the protected area."
-    else:
-        return 'You need to log in first.'  # Redirect to the login page if not logged in
+    return redirect('http://ec2-18-218-184-140.us-east-2.compute.amazonaws.com/thankyou')
 
 
-    
-@application.route('/check_login_status')
-def check_login_status():
-    if not session.get('logged_in'):
-        return jsonify({'logged_in': False})
-    else:
-        return jsonify({'logged_in': True})
 
 @application.route('/customers', methods=['GET'])  # Endpoint to return all customers
 def api_get_customers():
@@ -340,7 +289,7 @@ def post_create_review():
     addreview = "INSERT INTO reviews (cust_ID, rev_date, rev_description, rev_rating) VALUES (%s, '%s', '%s',%s)" % (
     cust_id, today, revdescription, revrating)
     execute_query(conn, addreview)  # executes above query to add the provided data to table
-    return redirect('http://localhost:3000/thankyou')
+    return redirect('http://ec2-18-218-184-140.us-east-2.compute.amazonaws.com/thankyou')
 
 @application.route('/addpromotion', methods=['POST'])  # endpoint to submit a promotion
 def post_create_promo():
@@ -416,4 +365,4 @@ def update_promotion(promotion_id):
         # Handle errors, e.g., database errors
         return jsonify({'success': False, 'error': str(e)})
 
-application.run()
+application.run(host='0.0.0.0', port=80)
