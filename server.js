@@ -213,7 +213,7 @@ app.get('/userAlreadyExists', (req, res, next) => {
 });
 
 app.get('/', (req, res) => {
-    axios.get(`http://127.0.0.1:5000/checkinpromo`,{
+    axios.get(`http://ec2-18-116-39-255.us-east-2.compute.amazonaws.com:8000/checkinpromo`,{
         withCredentials: true  // Include cookies for authentication
     })
        .then((rewardresponse) => {
@@ -229,7 +229,7 @@ app.get('/', (req, res) => {
 
 app.get('/checkedin', (req, res) => {
 
-    axios.get(`http://127.0.0.1:5000/checkedin`,{
+    axios.get(`http://ec2-18-116-39-255.us-east-2.compute.amazonaws.com:8000/checkedin`,{
      withCredentials: true  // Include cookies for authentication
  })
     .then((rewardresponse) => {
@@ -243,7 +243,7 @@ app.get('/checkedin', (req, res) => {
  });
 
  app.get('/newcheckin', (req, res) => {
-    axios.get(`http://127.0.0.1:5000/newcheckin`,{
+    axios.get(`http://ec2-18-116-39-255.us-east-2.compute.amazonaws.com:8000/newcheckin`,{
      withCredentials: true  // Include cookies for authentication
  })
     .then((rewardresponse) => {
@@ -278,7 +278,7 @@ app.post('/check-in', (req, res) => {
 
 app.get('/reward',isAuth, (req, res) => {
 
-   axios.get(`http://127.0.0.1:5000/customerpoints`,{
+   axios.get(`http://ec2-18-116-39-255.us-east-2.compute.amazonaws.com:8000/customerpoints`,{
     withCredentials: true  // Include cookies for authentication
 })
    .then((rewardresponse) => {
@@ -293,7 +293,7 @@ app.get('/reward',isAuth, (req, res) => {
 
 app.get('/promotion',isAuth, (req, res) => {
             
-    axios.get(`http://127.0.0.1:5000/allpromos`)
+    axios.get(`http://ec2-18-116-39-255.us-east-2.compute.amazonaws.com:8000/allpromos`)
     .then((rewardresponse) => {
     var promotions = rewardresponse.data;
     res.render('promotion', { promotions:promotions});
@@ -306,7 +306,7 @@ app.get('/promotion',isAuth, (req, res) => {
 
 // Get Redemption History Page
 app.get('/redemption-history',isAuth, (req, res) => {
-    axios.get(`http://127.0.0.1:5000/redemptionhistory`)
+    axios.get(`http://ec2-18-116-39-255.us-east-2.compute.amazonaws.com:8000/redemptionhistory`)
     .then((response) => {
     var customers = response.data;
     res.render('redemption-history', { customers:customers});
@@ -319,7 +319,7 @@ app.get('/redemption-history',isAuth, (req, res) => {
 
 
 app.get('/reviews', (req, res) => {
-    axios.get(`http://127.0.0.1:5000/allreviews`)
+    axios.get(`http://ec2-18-116-39-255.us-east-2.compute.amazonaws.com:8000/allreviews`)
     .then((rewardresponse) => {
     var reviews = rewardresponse.data;
     const averageRating = calculateAverageRating(reviews);
@@ -332,7 +332,7 @@ app.get('/reviews', (req, res) => {
 });
 
 app.get('/delete-reviews',isAuth, (req, res) => {
-    axios.get(`http://127.0.0.1:5000/allreviews`)
+    axios.get(`http://ec2-18-116-39-255.us-east-2.compute.amazonaws.com:8000/allreviews`)
     .then((rewardresponse) => {
     var reviews = rewardresponse.data;
     const averageRating = calculateAverageRating(reviews);
@@ -345,7 +345,7 @@ app.get('/delete-reviews',isAuth, (req, res) => {
 });
 
 app.get('/customer-information',isAuth, (req, res) => {
-    axios.get('http://127.0.0.1:5000/customerinfo', {
+    axios.get('http://ec2-18-116-39-255.us-east-2.compute.amazonaws.com:8000/customerinfo', {
         withCredentials: true  // Include cookies for authentication
     })
     .then((rewardresponse) => {

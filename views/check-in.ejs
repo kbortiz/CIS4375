@@ -58,7 +58,7 @@
     
         const formData = new FormData(this);  // Get form data
     
-        fetch('http://127.0.0.1:5000/check_customer', {
+        fetch('http://ec2-18-116-39-255.us-east-2.compute.amazonaws.com:8000/check_customer', {
             method: 'POST',
             credentials: 'include',  // Include cookies for authentication
             body: formData
