@@ -18,7 +18,7 @@
                     <div class="card-body">
                         <p>You have <%= customers[0].current_points %> points.</p>
                         <h3>How was your last visit?</h3>
-                        <form action="http://127.0.0.1:5000/addreview" method="POST">
+                        <form action="http://ec2-18-116-39-255.us-east-2.compute.amazonaws.com:8000/addreview" method="POST">
                             <div class="form-group">
                                 <label for="rev_rating">Rating (1-5 stars)</label>
                                 <input type="number" class="form-control" id="rev_rating" name="rev_rating" min="1" max="5" required>
@@ -46,7 +46,7 @@
 
 
         // Send a POST request to your Flask endpoint
-        fetch('http://127.0.0.1:5000/addreview', {
+        fetch('http://ec2-18-116-39-255.us-east-2.compute.amazonaws.com:8000/addreview', {
             method: 'POST',
             credentials: 'include',  // Include cookies for authentication
             body: formData
