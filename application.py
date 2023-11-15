@@ -115,13 +115,13 @@ def post_add_customer():
     lastname = request.form['last_name']
     email = request.form['email']
     birthday = request.form['birthday']
-    input_date = datetime.strptime(birthday, "%m/%d/%Y")
+    if birthday:
+        input_date = datetime.strptime(birthday, "%m/%d/%Y")
+        # Format the datetime object to the desired MySQL-compatible format (Y-M-D)
+        mysql_formatted_date = input_date.strftime("%Y-%m-%d")
 
-    # Format the datetime object to the desired MySQL-compatible format (Y-M-D)
-    mysql_formatted_date = input_date.strftime("%Y-%m-%d")
-
-    print(birthday)
-    print(mysql_formatted_date)
+    #print(birthday)
+    #print(mysql_formatted_date)
 
     addcustomer = "UPDATE customer_information SET first_name = %s, last_name = %s,email = %s, birthday = %s WHERE cust_id = %s"
     values = (firstname, lastname, email, mysql_formatted_date, cust_id)
@@ -365,4 +365,4 @@ def update_promotion(promotion_id):
         # Handle errors, e.g., database errors
         return jsonify({'success': False, 'error': str(e)})
 
-#application.run(host='0.0.0.0', port=80)
+application.run()
