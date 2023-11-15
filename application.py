@@ -188,7 +188,7 @@ def api_get_customercount():
 def api_get_customerinfo():
     conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
                              "Davi_Nails")
-    sql = "select ci.phone_number, ci.last_name, ci.first_name, ci.email, DATE_FORMAT(ci.birthday, '%m/%d/%Y') as 'birthday' ,(select DATE_FORMAT(chk.ci_date, '%m/%d/%Y') FROM check_ins AS chk where ci.cust_id = chk.cust_id order by chk.ci_date DESC LIMIT 1) as 'lastVisit',cpo.categori_id from customer_information ci inner join customer_points cpo ON ci.cust_id = cpo.cust_id order by lastVisit DESC;"
+    sql = "select ci.phone_number, ci.last_name, ci.first_name, ci.email, DATE_FORMAT(ci.birthday, '%m/%d/%Y') as 'birthday' ,(select DATE_FORMAT(chk.ci_date, '%m/%d/%Y') FROM check_ins AS chk where ci.cust_id = chk.cust_id order by chk.ci_date DESC LIMIT 1) as 'lastVisit',cpo.category_id from customer_information ci inner join customer_points cpo ON ci.cust_id = cpo.cust_id order by lastVisit DESC;"
     printlogs = execute_read_query(conn, sql)
 
     return jsonify(printlogs)  # Prints all logs
