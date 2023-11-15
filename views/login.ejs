@@ -1,67 +1,49 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Login</title>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Login System</title>
+    <script src="https://kit.fontawesome.com/7cddce98d5.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">    
     <link rel="stylesheet" href="/public/styles.css">
-    
-</head>
-<link rel="stylesheet" type="text/css" href="/styles.css">
-<body>
-    <div class="wrapper">
-        <%- include('partials/sidebar') %>
-    </div>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">Login</div>
-                    <div class="card-body">
-                        <form action="http://127.0.0.1:5000/login" method="POST">
-                            <div class="form-group">
-                                <label for="username">Username:</label>
-                                <input type="text" class="form-control" id="username" name="username" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="password">Password:</label>
-                                <input type="password" class="form-control" id="password" name="password" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary login-button">Login</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;900&family=Ubuntu&display=swap" rel="stylesheet">
+    <link rel="icon" href="/images/traffic_small_logo.png">
+  </head>
+  <link rel="stylesheet" type="text/css" href="/styles.css">
+  <body>
+      <div class="wrapper">
+          <%- include('partials/sidebar2') %>
+      </div>
+      <div class="container mt-5">
+          <div class="row justify-content-center">
+              <div class="col-md-6">
+                  <div class="card">
+                      <div class="card-header">Login</div>
+                      <div class="card-body">
+                          <form action="/login" method="POST">
+                              <div class="form-group">
+                                  <label for="username">Username:</label>
+                                  <input type="text" class="form-control" name="uname" required>
+                              </div>
+                              <div class="form-group">
+                                  <label for="password">Password:</label>
+                                  <input type="password" class="form-control"z name="pw" required>
+                              </div>
+                              <button class="singlebutton btn btn-primary " formaction="/login" type="submit"> Login</button>
+                          </form>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  
+  
+  
+  
+  </body>
+  </html>
 
-<script>
-    document.getElementById('login-form').addEventListener('submit', function (event) {
-    event.preventDefault();  // Prevent the default form submission
-
-    const formData = new FormData(this);  // Get form data
-
-    fetch('http://127.0.0.1:5000/login', {
-        method: 'POST',
-        credentials: 'include',  // Include cookies for authentication
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.logged_in) {
-            // Redirect to /rewards on successful login
-            window.location.href = '/rewards';
-        } else {
-            location.reload();
-        }
-    })
-    .catch(error => {
-        // Handle errors
-    });
-});
-
-</script>
-
-
-</body>
-</html>
 

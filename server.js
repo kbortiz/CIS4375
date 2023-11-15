@@ -1,34 +1,231 @@
+const passport=require('passport');
+const LocalStrategy=require('passport-local').Strategy;
 const express = require('express');
 const app = express();
-const port = 3000;
 const { body, validationResult } = require('express-validator');
-const session = require('express-session');
+const bodyParser = require("body-parser");
+const mysql = require('mysql');
+const crypto=require('crypto');
 const axios = require('axios');
-const { response } = require('express');
+var session = require('express-session');
+var MySQLStore = require('express-mysql-session')(session);
+const port = 3000;
 
-app.set('view engine', 'ejs');
+
+/*Mysql Express Session*/
+
+app.use(session({
+	key: 'session_cookie_name',
+	secret: 'session_cookie_secret',
+	store: new MySQLStore({
+        host: "cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com",
+        port: 3306,
+        user: "admin",
+        password: "password",
+        database: "Davi_Nails"
+    }),
+	resave: false,
+    saveUninitialized: false,
+    cookie:{
+        maxAge:1000*60*60*24,
+       
+    }
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 app.use(express.static('public'));
 app.use(express.static(__dirname));
+app.set("view engine", "ejs");
 
-// Define a middleware to set the currentUrl for all routes
-app.use((req, res, next) => {
+
+/*Mysql Connection*/
+
+var connection = mysql.createConnection({
+    host: "cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com",
+    user: "admin",
+    password: "password",
+    database: "Davi_Nails",
+    multipleStatements: true
+  });
+  connection.connect((err) => {
+    if (err) {
+      console.log("Connection failed");
+    } else {
+      console.log("Conected");
+    }
+  });
+
+  const customFields={
+    usernameField:'uname',
+    passwordField:'pw',
+};
+
+
+/*Passport JS*/
+const verifyCallback=(username,password,done)=>{
+   
+     connection.query('SELECT * FROM users WHERE username = ? ', [username], function(error, results, fields) {
+        if (error) 
+            return done(error);
+
+        if(results.length==0)
+        {
+            return done(null,false);
+        }
+        const isValid=validPassword(password,results[0].hash,results[0].salt);
+        user={id:results[0].id,username:results[0].username,hash:results[0].hash,salt:results[0].salt};
+        if(isValid)
+        {
+            return done(null,user);
+        }
+        else{
+            return done(null,false);
+        }
+    });
+}
+
+const strategy=new LocalStrategy(customFields,verifyCallback);
+passport.use(strategy);
+
+
+passport.serializeUser((user,done)=>{
+    console.log("inside serialize");
+    done(null,user.id)
+});
+
+passport.deserializeUser(function(userId,done){
+    console.log('deserializeUser'+ userId);
+    connection.query('SELECT * FROM users where id = ?',[userId], function(error, results) {
+            done(null, results[0]);    
+    });
+});
+
+
+
+/*middleware*/
+function validPassword(password,hash,salt)
+{
+    var hashVerify=crypto.pbkdf2Sync(password,salt,10000,60,'sha512').toString('hex');
+    return hash === hashVerify;
+}
+
+function genPassword(password)
+{
+    var salt=crypto.randomBytes(32).toString('hex');
+    var genhash=crypto.pbkdf2Sync(password,salt,10000,60,'sha512').toString('hex');
+    return {salt:salt,hash:genhash};
+}
+
+
+ function isAuth(req,res,next)
+{
+    if(req.isAuthenticated())
+    {
+        next();
+    }
+    else
+    {
+        res.redirect('/login');
+    }
+}
+
+
+function userExists(req,res,next)
+{
+    connection.query('Select * from users where username=? ', [req.body.uname], function(error, results, fields) {
+        if (error) 
+            {
+                console.log("Error");
+            }
+       else if(results.length>0)
+         {
+            res.redirect('/userAlreadyExists')
+        }
+        else
+        {
+            next();
+        }
+       
+    });
+}
+
+
+app.use((req,res,next)=>{
+    console.log(req.session);
+    console.log(req.user);
     res.locals.currentUrl = req.originalUrl;
     next();
 });
 
-app.use(session({
-    secret: 'secretkey',
-    resave: true,
-    saveUninitialized: true,
-  }));
+/*routes*/
+
+app.get('/login', (req, res, next) => {
+    res.render('login')
+});
+
+app.get('/logout', (req, res) => {
+    req.logout(() => {
+        res.redirect('/');
+    });
+});
+
+
+app.get('/register', (req, res, next) => {
+    console.log("Inside get");
+    res.render('register')
+    
+});
+
+app.post('/register',userExists,(req,res,next)=>{
+    console.log("Inside post");
+    console.log(req.body.pw);
+    const saltHash=genPassword(req.body.pw);
+    console.log(saltHash);
+    const salt=saltHash.salt;
+    const hash=saltHash.hash;
+
+    connection.query('Insert into users(username,hash,salt) values(?,?,?) ', [req.body.uname,hash,salt], function(error, results, fields) {
+        if (error) 
+            {
+                console.log("Error adding user");
+            }
+        else
+        {
+            console.log("Successfully Entered");
+        }
+       
+    });
+
+    res.redirect('/login');
+});
+
+app.post('/login',passport.authenticate('local',{failureRedirect:'/login',successRedirect:'/reward'}));
+
+app.get('/userAlreadyExists', (req, res, next) => {
+    console.log("Inside get");
+    res.send('<h1>Sorry This username is taken </h1><p><a href="/register">Register with different username</a></p>');
+    
+});
 
 app.get('/', (req, res) => {
-    res.render('check-in');
+    axios.get(`http://127.0.0.1:5000/checkinpromo`,{
+        withCredentials: true  // Include cookies for authentication
+    })
+       .then((rewardresponse) => {
+        var customers = rewardresponse.data;
+        res.render('check-in', { customers:customers});
+        })
+        .catch((error) => {
+            console.error('Axios error:', error);
+            // Handle the error, e.g., by displaying an error message to the user
+        });
 });
 
-app.get('/login', (req, res) => {
-    res.render('login');
-});
 
 app.get('/checkedin', (req, res) => {
 
@@ -63,25 +260,6 @@ app.get('/thankyou', (req, res) => {
     res.render('thank-you');
 });
 
-app.post('/login', [
-    body('username').notEmpty().withMessage('Username is required'),
-    body('password').notEmpty().withMessage('Password is required'),
-  ], (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.render('login', { errors: errors.array() });
-    }
-  
-    const { username, password } = req.body;
-  
-    if (username === 'user' && password === 'password') {
-      req.session.authenticated = true;
-      res.redirect('/reward');
-    } else {
-      return res.render('login', { error: 'Invalid username or password' });
-    }
-});
-
 app.post('/check-in', (req, res) => {
     const phoneNumber = req.body.phoneNumber;
 
@@ -97,32 +275,8 @@ app.post('/check-in', (req, res) => {
     }
 });
 
-// Handle the form submission for new customer registration
-app.post('/register-customer', (req, res) => {
-    const phoneNumber = req.body.phoneNumber;
-    const firstName = req.body.firstName;
-    const lastName = req.body.lastName;
 
-    // Save the new customer to the customers database
-    customers.push({ phoneNumber, firstName, lastName });
-
-    // Define customerName
-    const customerName = `${firstName} ${lastName}`;
-
-    // You can set the initial value of currentPoints here or fetch it from your database.
-    const currentPoints = 0; // Change this to the appropriate initial value
-
-    // Redirect to checkedin.ejs and pass customerName and currentPoints
-    res.render('checkedin', { customerName, currentPoints });
-});
-
-app.post('/rate-visit', (req, res) => {
-    const { rating, comment } = req.body;
-
-    res.render('thank-you'); // You should create a "thank-you.ejs" template
-});
-
-app.get('/reward', (req, res) => {
+app.get('/reward',isAuth, (req, res) => {
 
    axios.get(`http://127.0.0.1:5000/customerpoints`,{
     withCredentials: true  // Include cookies for authentication
@@ -137,7 +291,7 @@ app.get('/reward', (req, res) => {
     });
 });
 
-app.get('/promotion', (req, res) => {
+app.get('/promotion',isAuth, (req, res) => {
             
     axios.get(`http://127.0.0.1:5000/allpromos`)
     .then((rewardresponse) => {
@@ -151,7 +305,7 @@ app.get('/promotion', (req, res) => {
 });
 
 // Get Redemption History Page
-app.get('/redemption-history', (req, res) => {
+app.get('/redemption-history',isAuth, (req, res) => {
     axios.get(`http://127.0.0.1:5000/redemptionhistory`)
     .then((response) => {
     var customers = response.data;
@@ -177,7 +331,7 @@ app.get('/reviews', (req, res) => {
     });
 });
 
-app.get('/delete-reviews', (req, res) => {
+app.get('/delete-reviews',isAuth, (req, res) => {
     axios.get(`http://127.0.0.1:5000/allreviews`)
     .then((rewardresponse) => {
     var reviews = rewardresponse.data;
@@ -190,7 +344,7 @@ app.get('/delete-reviews', (req, res) => {
     });
 });
 
-app.get('/customer-information', (req, res) => {
+app.get('/customer-information',isAuth, (req, res) => {
     axios.get('http://127.0.0.1:5000/customerinfo', {
         withCredentials: true  // Include cookies for authentication
     })
@@ -228,17 +382,6 @@ function calculateAverageRating(reviews) {
     const totalRating = reviews.reduce((sum, review) => sum + review.rev_rating, 0);
     const averageRating = totalRating / reviews.length;
     return averageRating.toFixed(2); // Round the average to two decimal places
-}
-
-// Custom middleware to check user authentication
-function isAuthenticated(req, res, next) {
-    if (req.session.logged_in) {
-        // User is authenticated, allow access to the route
-        next();
-    } else {
-        // User is not authenticated, redirect to the login page or return an error
-        res.redirect('/login'); // You can specify your login route
-    }
 }
 
 app.listen(port, () => {

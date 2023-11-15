@@ -4,6 +4,7 @@
     <title>Customer Information</title>
     <link rel="stylesheet" type="text/css" href="/styles.css">
     <script src="/search_box.js"></script>
+    <script src="/auth.js"></script>
 </head>
 <body>
 <div class="wrapper">
@@ -49,5 +50,21 @@
         </div>
     </div>
 </div>
+<!-- <script>
+    checkAuthentication(); // This function checks if the user is authenticated
+
+    // Check if the user is authenticated when accessing the protected route
+    checkAuthentication()
+        .then(() => {
+            // If the user is authenticated, show restricted content or navigate to the route
+            // Here you can add content or routes that should be restricted
+            // For example, in this case, only authenticated users can see this content
+        })
+        .catch(error => {
+            console.error('Not authenticated:', error);
+            window.location.href = '/login'; // Redirect to the login page if not authenticated
+        });
+</script> -->
+
 </body>
 </html>

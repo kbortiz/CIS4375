@@ -6,27 +6,51 @@
     <link rel="stylesheet" href="/public/styles.css">
 </head>
 <body>
-    <div class="wrapper">
-        <%- include('partials/sidebar') %>
-    </div>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3 p-0">
+                <div class="wrapper">
+                    <%- include('partials/sidebar2') %>
+                </div>
+            </div>
             <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">Check-In</div>
-                    <div class="card-body">
-                        <form action="http://127.0.0.1:5000/check_customer" method="POST"> <!-- Make sure the 'action' points to /check-in -->
-                            <div class="form-group">
-                                <label for="phone_number">Phone Number:</label>
-                                <input type="text" class="form-control" id="phone_number" name="phone_number" required>
+                <header class="text-center mb-4">
+                    <img src="/images/davinail.png" alt="DaVi Nail Logo" width="431" height="126">
+                    <h1>Welcome to Davi Nail!</h1>
+                </header>
+            <div class="container mt-5">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">Check-In</div>
+                            <div class="card-body">
+                                <form action="http://127.0.0.1:5000/check_customer" method="POST"> <!-- Make sure the 'action' points to /check-in -->
+                                    <div class="form-group">
+                                        <label for="phone_number">Phone Number:</label>
+                                        <input type="text" class="form-control" id="phone_number" name="phone_number" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary login-button">Check In</button>
+                                </form>
                             </div>
-                            <button type="submit" class="btn btn-primary login-button">Check In</button>
-                        </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container mt-3">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">Current Promotion</div>
+                            <div class="card-body">
+                                <p><strong>20% off one appointment</strong> </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
     <script>
         document.getElementById('login-form').addEventListener('submit', function (event) {

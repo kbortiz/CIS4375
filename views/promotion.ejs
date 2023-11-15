@@ -95,7 +95,7 @@
                                 <td>
                                     <input type="text" id = "promo_cost" name="promo_cost" required>
                                 </td>
-                                <td><label for="ExpirationDate"><i class="fa fa-calendar" style="color: #000000;"></i> Expiration Date: </label></td>
+                                <td><label for="exp_date"><i class="fa fa-calendar" style="color: #000000;"></i> Expiration Date: </label></td>
                                 <td>
                                     <input type="text" name="exp_date" id="exp_date" placeholder="MM/DD/YYYY">
                                 </td>
@@ -120,7 +120,7 @@
                                 <td></td> <!-- Empty cell for spacing -->
                                 <td></td>
                                 <td></td>
-                                <td><button type="submit">Add Promotion</button> </td>
+                                <td><button type="submit" id="addPromotionButton">Add Promotion</button> </td>
                             </tr>
                         </tbody>
                     </table>
@@ -129,8 +129,13 @@
         </div>
     </div>
 </div>
+
 <script>
-    document.getElementById('addPromotionForm').addEventListener('submit', function(event) {
+    document.addEventListener('DOMContentLoaded', function () {
+        const addPromotionButton = document.getElementById('addPromotionButton');
+        const addPromotionForm = document.getElementById('addPromotionForm');
+
+        document.getElementById('addPromotionForm').addEventListener('submit', function(event) {
         event.preventDefault();
 
         // Get form data
@@ -159,10 +164,21 @@
         .then(response => response.text())
         .then(data => {
         console.log(data);  // Log the response
+        document.getElementById('addPromotionForm').reset();
         location.reload();  // Reset the form
     })
         .catch(error => {
             console.error('Error:', error);
+        });
+    
+        
+    });
+
+        // Initialize 'flatpickr' for manualExpirationDate input
+        const manualExpirationDateInput = document.getElementById('exp_date');
+        const flatpickrInstance = flatpickr(manualExpirationDateInput, {
+            dateFormat: 'm/d/Y',
+            enableTime: false,
         });
     });
 </script>

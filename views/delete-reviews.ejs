@@ -11,6 +11,7 @@
         border: none;
         border-radius: 8px;
         font-weight: bold;
+        cursor: pointer;
     }
     .delete:hover {
         background-color: #c20908;
@@ -23,6 +24,7 @@
         border: none;
         border-radius: 8px;
         font-weight: bold;
+        cursor: pointer;
     }
     .button:hover {
         background-color: #a795ff;
@@ -54,6 +56,25 @@
         float: none;
         box-shadow: 3px 3px 8px #888888;
         border-radius: .8rem;
+    }
+    .pagination {
+        margin-top: 20px; /* Add some spacing between reviews and pagination */
+        text-align: center;
+    }
+
+    .pagination button {
+        padding: 15px 15px;
+        background-color: #69f9da;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .pagination span {
+        padding: 10px 20px;
+        font-size: 16px;
+        margin: 0 5px;
     }
 </style>
 <body>
@@ -91,7 +112,6 @@
                     <button class="delete" onclick="deleteReview('<%= reviews[i].review_id %>')">Delete</button>
                 </div>
                 <% } %>
-            
         </div>
     </div>
 </div>

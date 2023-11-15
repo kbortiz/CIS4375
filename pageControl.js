@@ -54,9 +54,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Initial update of the current page number
         updateCurrentPage();
+        updateTable();
     }
 
     // Example usage on a specific page
     // Replace the parameters with actual values for your specific page
-    initializePagination(100, 25, 'prevPageButton', 'nextPageButton', 'currentPage');
+    initializePagination(1000, 10, 'prevPageButton', 'nextPageButton', 'currentPage');
 });

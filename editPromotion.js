@@ -1,4 +1,6 @@
 
+    
+    
     // Function to edit a promotion
     function editPromotion(id) {
         const row = document.querySelector(`tr[data-promo-id="${id}"]`);
@@ -14,6 +16,12 @@
                 field.innerHTML = '';
                 field.appendChild(input);
             }
+        });
+
+        const expirationField = row.querySelector('td[data-field="exp_date"] input');
+        const flatpickrInstance = flatpickr(expirationField, {
+            dateFormat: 'm/d/Y',
+            enableTime: false,
         });
 
         // Create a dropdown with options for ACTIVE and INACTIVE for the "Status" field
@@ -68,7 +76,16 @@
                 const statusField = row.querySelector('td[data-field="promo_status"]');
                 const statusValue = statusField.querySelector('select').value;
                 updatedValues[fieldName] = statusValue;
-            } else {
+            } 
+            else if (fieldName === 'exp_date'){
+                const input = field.querySelector('input');
+                const dateValue = input.value;
+                const dateParts = dateValue.split('/');
+                const dateFormatted = dateParts[2] + '-' + dateParts[0] + '-' + dateParts[1];
+                updatedValues[fieldName] = dateFormatted;
+                input.value = dateFormatted;
+            }
+            else {
                 // Handle other fields
                 const input = field.querySelector('input');
                 updatedValues[fieldName] = input.value;
