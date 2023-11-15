@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   ctx.canvas.style.padding = '20px';
 
-  fetch('http://127.0.0.1:5000/customercount')
+  fetch('http://ec2-18-116-39-255.us-east-2.compute.amazonaws.com:8000/customercount')
   .then(response => response.json())
   .then(data => {
       console.log(data);

@@ -120,7 +120,7 @@
     function deleteReview(review_id) {
     console.log(review_id);
     if (confirm('Are you sure you want to delete this review?')) {
-        fetch(`http://127.0.0.1:5000/deletereview/${review_id}`, {
+        fetch(`http://ec2-18-116-39-255.us-east-2.compute.amazonaws.com:8000/deletereview/${review_id}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

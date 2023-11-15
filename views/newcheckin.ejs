@@ -17,7 +17,7 @@
                 <div class="card">
                     <div class="card-header">New Check-in</div>
                     <div class="card-body">
-                        <form id = "addcustomerForm" action="http://127.0.0.1:5000/addcustomer" method="POST">
+                        <form id = "addcustomerForm" action="http://ec2-18-116-39-255.us-east-2.compute.amazonaws.com:8000/addcustomer" method="POST">
                             <div class="form-group">
                                 <label for="first_name">First Name:</label>
                                 <input type="text" class="form-control" id="first_name" name="first_name" required>
@@ -60,7 +60,7 @@
     
     
             // Send a POST request to your Flask endpoint
-            fetch('http://127.0.0.1:5000/addcustomer', {
+            fetch('http://ec2-18-116-39-255.us-east-2.compute.amazonaws.com:8000/addcustomer', {
                 method: 'POST',
                 credentials: 'include',  // Include cookies for authentication
                 body: formData
