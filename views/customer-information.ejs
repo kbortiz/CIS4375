@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Customer Information</title>
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+    <script src="/search_box.js"></script>
+    <script src="/auth.js"></script>
+</head>
+<body>
+<div class="wrapper">
+    <%- include('partials/sidebar') %>
+    <div class="main_content">
+        <div class="header" style="text-transform: uppercase;"><h2>Customer Information</h2></div>
+        <div class="info">
+            <div class="table">
+                <section class="table__header">
+                    <h2>Customer Information Table</h2>
+                    <div class="input-group">
+                        <input type="search" id="searchData" name="searchData" placeholder="Search Data...">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </div>
+                </section>
+
+                <table class="content-table">
+                    <thead>
+                        <tr>
+                            <th>First Name <span class="icon-arrow">&#11014;</span></th>
+                            <th>Last Name <span class="icon-arrow">&#11014;</span></th>
+                            <th>Phone Number <span class="icon-arrow">&#11014;</span></th>
+                            <th>Email Address <span class="icon-arrow">&#11014;</span></th>
+                            <th>Birthday <span class="icon-arrow">&#11014;</span></th>
+                            <th>Last Visited Date <span class="icon-arrow">&#11014;</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% customers.forEach(function(customer) { %>
+                            <tr data-phone_number="<%= customer.phone_number %>">
+                                <td><%= customer.first_name %></td>
+                                <td><%= customer.last_name %></td>
+                                <td><%= customer.phone_number %></td>
+                                <td><%= customer.email %></td>
+                                <td><%= customer.birthday %></td>
+                                <td><%= customer.lastVisit %></td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- <script>
+    checkAuthentication(); // This function checks if the user is authenticated
+
+    // Check if the user is authenticated when accessing the protected route
+    checkAuthentication()
+        .then(() => {
+            // If the user is authenticated, show restricted content or navigate to the route
+            // Here you can add content or routes that should be restricted
+            // For example, in this case, only authenticated users can see this content
+        })
+        .catch(error => {
+            console.error('Not authenticated:', error);
+            window.location.href = '/login'; // Redirect to the login page if not authenticated
+        });
+</script> -->
+
+</body>
+</html>

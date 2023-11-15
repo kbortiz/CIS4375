@@ -1,0 +1,39 @@
+{
+  "name": "cis4375",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "build": "npm run webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kbortiz/CIS4375.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kbortiz/CIS4375/issues"
+  },
+  "homepage": "https://github.com/kbortiz/CIS4375#readme",
+  "dependencies": {
+    "axios": "^1.5.1",
+    "body": "^5.1.0",
+    "body-parser": "^1.20.2",
+    "chart.js": "^4.4.0",
+    "crypto": "^1.0.1",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "express-mysql-session": "^3.0.0",
+    "express-session": "^1.17.3",
+    "express-validator": "^7.0.1",
+    "flask": "^0.2.10",
+    "mysql": "^2.18.1",
+    "nodemon": "^3.0.1",
+    "parson": "^0.0.4",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0"
+  }
+}

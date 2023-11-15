@@ -1,0 +1,500 @@
+@import url('https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap');
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style: none;
+  text-decoration: none;
+  font-family: 'Josefin Sans', sans-serif;
+}
+
+body{
+   background-color: #f3f5f9;
+}
+
+/* wrapper style */
+.wrapper{
+  display: flex;
+  position: relative;
+}
+
+/* navigation bar*/
+.wrapper .sidebar{
+  width: 14%;
+  height: 100%;
+  background: #69f9da;
+  padding: 30px 0px;
+  position: fixed;
+}
+
+.wrapper .sidebar h2{
+  color: black;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.wrapper .sidebar ul li{
+  padding: 15px;
+  border-bottom: 1px solid #bdb8d7;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  border-top: 1px solid rgba(255,255,255,0.05);
+}    
+
+.wrapper .sidebar ul li a{
+  color: #000000;
+  display: block;
+}
+
+.wrapper .sidebar ul li a .fas{
+  width: 25px;
+}
+
+.wrapper .sidebar ul li:hover{
+  background-color: #a795ff;
+}
+    
+.wrapper .sidebar ul li:hover a{
+  color: #fff;
+}
+
+
+.wrapper .sidebar ul li.active {
+    background-color: #f3f5f9; /* Highlight color for the active item */
+    color: #000000; /* Text color for the active item */
+}
+
+.wrapper .sidebar .bottom-link {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+.wrapper .main_content{
+  width: 82%;
+  margin-left: 16%;
+  margin-right: 2%;
+}
+
+.wrapper .main_content .header{
+  padding: 20px;
+  background: #fff;
+  color: #000000;
+  border-bottom: 1px solid #e0e4e8;
+}
+
+.wrapper .main_content .info{
+  margin: 20px;
+  color: #000000;
+  line-height: 25px;
+}   
+
+.wrapper .main_content .info div{
+  margin-bottom: 20px;
+}
+
+/* chart and table style */
+
+.wrapper .main_content .table {
+  width: 100%;
+  height: auto;
+  background-color: #fff5;
+  backdrop-filter: blur(7px);
+  box-shadow: 0 .4rem .8rem #0005;
+  border-radius: .8rem;
+
+  overflow: hidden;
+
+}
+
+/* table header style */
+.wrapper .main_content .table .table__header {
+  width: 100%;
+  height: 10%;
+  background-color: #fff4;
+  padding: .8rem 1rem;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.wrapper .main_content .table .table__header .input-group {
+  width: 35%;
+  height: 100%;
+  background-color: #fff5;
+  padding: 0 .8rem;
+  margin: .1rem;
+  border-radius: 2rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transition: .2s;
+}
+
+.wrapper .main_content .table .table__header .input-group:hover {
+  width: 45%;
+  background-color: #fff8;
+  box-shadow: 0 .1rem .4rem #0002;
+}
+
+.wrapper .main_content .table .table__header .input-group img {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.wrapper .main_content .table .table__header .input-group input {
+  width: 100%;
+  padding: 0 .5rem 0 .3rem;
+  background-color: transparent;
+  border: none;
+  outline: none;
+}
+
+
+.wrapper .main_content .table .content-table {
+  border-collapse: collapse;
+  font-size: 0.9em;
+  width:96%;
+  border-radius: 5px 5px 0 0;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  margin-left: 2%;
+  margin-right: 2%;
+  margin-bottom: 2%;
+}
+
+.content-table thead tr {
+  background-color: #69f9da;
+  color: #000000;
+  text-align: left;
+  font-weight: bold;
+}
+
+.content-table th,
+.content-table td {
+  padding: 12px 15px;
+}
+
+.content-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.content-table tbody tr:nth-of-type(even) {
+  background-color: #eeeeee;
+}
+
+.content-table tbody tr:last-of-type {
+  border-bottom: 2px solid #69f9da;
+}
+
+
+/* adding css for the sorting table */
+.content-table thead tr th span.icon-arrow {
+  display: inline-block;
+  width: 1.3rem;
+  height: 1.3rem;
+  border-radius: 50%;
+  border: 1.4px solid black ;
+  text-align: center;
+  font-size: 1rem;
+  margin-left: .5rem;
+  transition: .2s ease-in-out;
+  color: #000000;
+}
+
+thead tr th:hover span.icon-arrow{
+  border: 1.4px solid #6c00bd;
+}
+
+thead tr th:hover {
+  color: #6c00bd;
+}
+
+thead tr th.active span.icon-arrow{
+  background-color: #6c00bd;
+  color: #fff;
+}
+
+thead tr th.asc span.icon-arrow{
+  transform: rotate(180deg);
+}
+
+
+
+thead tr th.active,tbody td.active {
+  color: #6c00bd;
+}
+
+.hide {
+  display: none;
+}
+
+/* Adding pie chart styles*/
+.chart-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
+}
+
+#doughnut-chart-container {
+  display:inline-block;
+  width:60%;
+  height: auto; 
+  text-align: center; /* Center the chart in the container */
+  padding-right: 15%;
+}
+
+/* different platform responsive */
+@media only screen and (max-width: 768px) {
+  #doughnut-chart-container {
+    width: 90%; /* 35% of the container width */
+    height: auto; 
+  }
+}
+
+.customer-total {
+  width: 40%;
+  text-align: left;
+  display: flex;
+  align-items: left;
+  justify-content: left;
+  padding-left: 10%;
+}
+
+#totalCustomers {
+  font-weight: bold;
+  color: #000000;
+}
+
+/*-------------------------------*/
+/* adding promotion css and button styles*/
+/*-------------------------------*/
+
+/* Add New Promotion form styling */
+#addPromotionForm {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 0.8rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+#addPromotionForm label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+#addPromotionForm input[type="text"],
+#addPromotionForm input[type="checkbox"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 0.3rem;
+  margin: 5px 0;
+}
+
+#addPromotionForm button {
+  background-color: #69f9da;
+  color: #000;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+#addPromotionForm button:hover {
+  background-color: #40a347;
+  color: white;
+
+}
+
+/* Edit button styling */
+.content-table tbody tr td:last-child button.edit-button {
+  background-color: #ffd700;
+  color: #000;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+/* Delete button styling */
+.content-table tbody tr td:last-child button.delete-button {
+  background-color: #c60004;
+  color: #fff;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.content-table tbody tr td:last-child button:hover {
+  background-color: #6c00bd;
+}
+
+/* Hover effect for Edit and Delete buttons */
+.content-table tbody tr td:last-child button.edit-button:hover {
+  background-color: #ffb933;
+}
+
+.content-table tbody tr td:last-child button.delete-button:hover {
+  background-color: #d32f2f;
+}
+
+/*------------------------------*/
+/* Adding CSS styles for status */
+/*------------------------------*/
+
+/* For "ACTIVE" status */
+.content-table tbody tr td .status.ACTIVE {
+  background-color: #40a347;
+  color: white;
+  border-radius: 12px;
+  padding: 4px 8px 2px 8px;
+  min-width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+/* For "INACTIVE" status */
+.content-table tbody tr td .status.INACTIVE {
+  background-color: #ffd700;
+  color: black;
+  border-radius: 12px;
+  padding: 4px 8px 2px 8px;
+  min-width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+/* Media query for small screens */
+@media (max-width: 768px) {
+  .content-table tbody tr td .status.ACTIVE,
+  .content-table tbody tr td .status.INACTIVE {
+    width: 20px;
+    padding: 2px 6px;
+  }
+}
+
+
+/*--------------------------------------------------*/
+/* Adding CSS styles for calendar icon for the form */
+/*--------------------------------------------------*/
+.wrapper .main_content .table .content-form {
+  border-collapse: collapse;
+  font-size: 0.9em;
+  width:96%;
+  border-radius: 5px 5px 0 0;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  margin-left: 2%;
+  margin-right: 2%;
+  margin-bottom: 2%;
+}
+
+.content-form thead tr {
+  background-color: #69f9da;
+  color: #000000;
+  text-align: left;
+  font-weight: bold;
+}
+
+.content-form th,
+.content-form td {
+  padding: 12px 15px;
+}
+
+.content-form tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.content-form tbody tr:nth-of-type(even) {
+  background-color: #eeeeee;
+}
+
+.content-form tbody tr:last-of-type {
+  border-bottom: 2px solid #69f9da;
+}
+
+
+
+.input-with-calendar {
+  display: flex;
+  align-items: center;
+}
+
+.input-container {
+  flex: 1;
+}
+
+.calendar-icon-container {
+  margin-left: 5px; /* Adjust the margin as needed */
+}
+
+
+
+/* Adding the css for page control */
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.pagination-controls button {
+  background-color: #69f9da;
+  color: #000;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  margin: 0 10px; /* Add margin for spacing between buttons */
+}
+
+.pagination-controls #currentPage {
+  font-weight: bold;
+  color: #000;
+  margin: 0 10px; /* Add margin for spacing between buttons */
+}
+
+.pagination-controls button:hover {
+  background-color: #40a347;
+  color: white;
+}
+
+/*-------------------------------*/
+/* adding current points css and button styles*/
+/*-------------------------------*/
+
+
+/* Edit Current Points button styling */
+.edit-button {
+  background-color: #ffd700;
+  color: #000;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+
+/* Hover effect for Edit button */
+.edit-button:hover {
+  background-color: #ffb933;
+}

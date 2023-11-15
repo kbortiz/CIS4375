@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/public/styles.css">
+</head>
+<body>
+    <div class="wrapper">
+        <%- include('partials/sidebar') %>
+    </div>
+    <div class="container-mt-5">
+        
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">Welcome, <%= customers[0].first_name %> <%= customers[0].last_name %></div>
+                    <div class="card-body">
+                        <p>You have <%= customers[0].current_points %> points.</p>
+                        <h3>How was your last visit?</h3>
+                        <form action="http://127.0.0.1:5000/addreview" method="POST">
+                            <div class="form-group">
+                                <label for="rev_rating">Rating (1-5 stars)</label>
+                                <input type="number" class="form-control" id="rev_rating" name="rev_rating" min="1" max="5" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="rev_description">Comment (optional)</label>
+                                <textarea class="form-control" id="rev_description" name="rev_description" rows="3"></textarea>
+                            </div>
+                            <input type="hidden" id="cust_id" name="cust_id" value= "<%= customers[0].cust_id %>">
+                            <button type="submit" class="submit-button">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    document.getElementById('addReviewForm').addEventListener('submit', function(event) {
+        event.preventDefault()
+
+        // Get form data
+        const formData = new FormData(this);
+
+
+        // Send a POST request to your Flask endpoint
+        fetch('http://127.0.0.1:5000/addreview', {
+            method: 'POST',
+            credentials: 'include',  // Include cookies for authentication
+            body: formData
+        })
+        .then(response => response.text())
+        .then(data => {
+        console.log(data);  // Log the response
+        location.reload();  // Reset the form
+    })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+</script>
+
+</html>
