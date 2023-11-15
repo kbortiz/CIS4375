@@ -94,7 +94,7 @@
         });
 
         // Send the updated values to the server via an AJAX request for saving
-        fetch(`http://127.0.0.1:5000/updatepromotion/${id}`, {
+        fetch(`http://ec2-18-116-39-255.us-east-2.compute.amazonaws.com:8000/updatepromotion/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

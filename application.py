@@ -115,13 +115,15 @@ def post_add_customer():
     lastname = request.form['last_name']
     email = request.form['email']
     birthday = request.form['birthday']
-    input_date = datetime.strptime(birthday, "%m/%d/%Y")
+    # Check if birthday is not empty before parsing
+    if birthday:
+        input_date = datetime.strptime(birthday, "%m/%d/%Y")
+        mysql_formatted_date = input_date.strftime("%Y-%m-%d")
+    else:
+        mysql_formatted_date = None  # or any default value you prefer
 
-    # Format the datetime object to the desired MySQL-compatible format (Y-M-D)
-    mysql_formatted_date = input_date.strftime("%Y-%m-%d")
-
-    print(birthday)
-    print(mysql_formatted_date)
+    #print(birthday)
+    #print(mysql_formatted_date)
 
     addcustomer = "UPDATE customer_information SET first_name = %s, last_name = %s,email = %s, birthday = %s WHERE cust_id = %s"
     values = (firstname, lastname, email, mysql_formatted_date, cust_id)
@@ -260,12 +262,12 @@ def api_get_activepromos():
 @application.route('/redemptionhistory', methods=['GET'])
 def get_redemption_history():
     conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password", "Davi_Nails")
-    sql = "SELECT ci.first_name, ci.last_name, p.promo_name, p.promo_cost, DATE_FORMAT(rh.redemption_date, '%m/%d/%Y') as redemption_date, cpo.current_points, cpo.lifetime_points " \
+    sql = "SELECT ci.first_name, ci.last_name, p.promo_name, p.promo_cost,rh.redemption_id, DATE_FORMAT(rh.redemption_date, '%m/%d/%Y') as redemption_date, cpo.current_points, cpo.lifetime_points " \
         "FROM redemption_history rh " \
         "JOIN customer_information ci ON rh.cust_id = ci.cust_ID " \
         "JOIN customer_points cpo ON cpo.cust_id = ci.cust_id " \
         "JOIN promotions p ON rh.promo_id = p.promo_ID " \
-        "ORDER BY rh.redemption_date DESC"
+        "ORDER BY rh.redemption_id DESC"
     redemption_history = execute_read_query(conn, sql)
     return jsonify(redemption_history)   
 
@@ -365,4 +367,4 @@ def update_promotion(promotion_id):
         # Handle errors, e.g., database errors
         return jsonify({'success': False, 'error': str(e)})
 
-#application.run(host='0.0.0.0', port=80)
+#application.run()

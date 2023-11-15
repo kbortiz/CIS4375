@@ -40,7 +40,7 @@ function saveCurrentPoints(phone_number) {
 // Function to send an update request to the server
 function updateCurrentPoints(phone_number, newPoints) {
     try {
-        fetch(`http://127.0.0.1:5000/updatepoints/${phone_number}`, {
+        fetch(`http://ec2-18-116-39-255.us-east-2.compute.amazonaws.com:8000/updatepoints/${phone_number}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
