@@ -175,7 +175,7 @@ app.get('/logout', (req, res) => {
 });
 
 
-app.get('/register', (req, res, next) => {
+app.get('/register', isAuth, (req, res, next) => {
     console.log("Inside get");
     res.render('register')
     
