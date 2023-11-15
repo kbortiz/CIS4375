@@ -201,7 +201,7 @@ app.post('/register',userExists,(req,res,next)=>{
        
     });
 
-    res.redirect('/login');
+    res.redirect('/reward');
 });
 
 app.post('/login',passport.authenticate('local',{failureRedirect:'/login',successRedirect:'/reward'}));
