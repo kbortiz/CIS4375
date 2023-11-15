@@ -49,6 +49,7 @@
                             <th>Email Address <span class="icon-arrow">&#11014;</span></th>
                             <th>Birthday <span class="icon-arrow">&#11014;</span></th>
                             <th>Last Visited Date <span class="icon-arrow">&#11014;</span></th>
+                            <th>Customer Status <span class="icon-arrow">&#11014;</span></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -60,6 +61,17 @@
                                 <td><%= customer.email %></td>
                                 <td><%= customer.birthday %></td>
                                 <td><%= customer.lastVisit %></td>
+                                <td>
+                                    <% if (customer.category_id === 1) { %>
+                                      New
+                                    <% } else if (customer.category_id === 2) { %>
+                                      At Risk
+                                    <% } else if (customer.category_id === 3) { %>
+                                      Regular
+                                    <% } else if (customer.category_id === 4) { %>
+                                      VIP
+                                    <% } %>
+                                </td>
                             </tr>
                         <% }); %>
                     </tbody>
