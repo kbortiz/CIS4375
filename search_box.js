@@ -14,11 +14,16 @@ const table_headings = document.querySelectorAll('.content-table thead tr th');
     function searchTable() {
         const search_data = search.value.toLowerCase();
         console.log('Search data:', search_data);
-        
+        // Reset pagination for empty search
+        if (search_data === '') {
+            start = 0;
+            end = itemsPerPage;
+            currentPage = 1;  // Reset current page to 1
+        }
         table_rows.forEach((row, i) => {
             let cells = row.querySelectorAll('td');
             let rowMatches = Array.from(cells).some(cell => cell.textContent.toLowerCase().includes(search_data));
-
+    
             if (rowMatches) {
                 row.classList.remove('hide');
             } else {
@@ -26,10 +31,11 @@ const table_headings = document.querySelectorAll('.content-table thead tr th');
             }
             row.style.setProperty('--delay', i / 25 + 's');
         });
-
+    
         // Update the visibility of rows based on pagination
-        updateTableVisibility();
+        updateTableVisibility(search_data);
     }
+    
 
     function updateTableVisibility() {
         const rows = document.querySelectorAll('.content-table tbody tr');
