@@ -10,6 +10,9 @@
     <link rel="stylesheet" type="text/css" href="/styles.css">
 
     <script src="/piechart.js"></script>
+    <script>
+        var itemsPerPage = 10; // Set the appropriate value for your case
+    </script>
     <script src="/search_box.js"></script>
     <script src="/pageControl.js"></script>
     <script src="/editCurrentPoints.js"></script>
@@ -38,7 +41,6 @@
                             <i class="fa fa-search" aria-hidden="true"></i>
                         </div>
                     </section>
-
                     <table class="content-table">
                         <thead>
                             <tr>
@@ -48,6 +50,7 @@
                                 <th>Last Visited Date <span class="icon-arrow">&#11014;</span></th>
                                 <th>Current Points <span class="icon-arrow">&#11014;</span></th>
                                 <th>Lifetime Points <span class="icon-arrow">&#11014;</span></th>
+                                <th>Customer Status <span class="icon-arrow">&#11014;</span></th>
                                 <th>Edit Current Points</th>
                             </tr>
                         </thead>
@@ -60,6 +63,18 @@
                                 <td><%= customer.ci_date %></td>
                                 <td><%= customer.current_points %></td>
                                 <td><%= customer.lifetime_points %></td>
+                                <td>
+                                    <% if (customer.category_id === 1) { %>
+                                      New
+                                    <% } else if (customer.category_id === 2) { %>
+                                      At Risk
+                                    <% } else if (customer.category_id === 3) { %>
+                                      Regular
+                                    <% } else if (customer.category_id === 4) { %>
+                                      VIP
+                                    <% } %>
+                                </td>
+                                  
                                 <td>
                                     <button class="edit-button" onclick="editCurrentPoints('<%= customer.phone_number %>')">Edit</button>
                                 </td>
@@ -87,7 +102,6 @@
             { name: 'V.I.P', minPoints: 21, maxPoints: Infinity }
         ];
     </script>
-
 
 </body>
 </html>
