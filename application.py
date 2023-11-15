@@ -115,10 +115,12 @@ def post_add_customer():
     lastname = request.form['last_name']
     email = request.form['email']
     birthday = request.form['birthday']
+    # Check if birthday is not empty before parsing
     if birthday:
         input_date = datetime.strptime(birthday, "%m/%d/%Y")
-        # Format the datetime object to the desired MySQL-compatible format (Y-M-D)
         mysql_formatted_date = input_date.strftime("%Y-%m-%d")
+    else:
+        mysql_formatted_date = None  # or any default value you prefer
 
     #print(birthday)
     #print(mysql_formatted_date)
