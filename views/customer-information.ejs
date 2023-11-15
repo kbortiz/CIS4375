@@ -2,7 +2,14 @@
 <html>
 <head>
     <title>Customer Information</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" type="text/css" href="/styles.css">
+
+    <script src="/piechart.js"></script>
     <script>
         var itemsPerPage = 10; // Set the appropriate value for your case
     </script>
@@ -15,6 +22,15 @@
     <div class="main_content">
         <div class="header" style="text-transform: uppercase;"><h2>Customer Information</h2></div>
         <div class="info">
+            <div class="chart-container">
+                <div class="customer-total">
+                    <h3>TOTAL CUSTOMERS: <span id="totalCustomers">???</span></h3>
+                </div>
+                <div id="doughnut-chart-container">
+                    <canvas></canvas>
+                </div>
+            </div>
+
             <div class="table">
                 <section class="table__header">
                     <h2>Customer Information Table</h2>
@@ -59,6 +75,15 @@
         </div>
     </div>
 </div>
-
+    <script>
+    
+        // Your categories data (you can keep this part as-is)
+        var categories = [
+            { name: 'New', minPoints: 1, maxPoints: 2 },
+            { name: 'At Risk', minPoints: 3, maxPoints: 4 },
+            { name: 'Regular', minPoints: 5, maxPoints: 20 },
+            { name: 'V.I.P', minPoints: 21, maxPoints: Infinity }
+        ];
+    </script>
 </body>
 </html>
