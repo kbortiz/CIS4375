@@ -4,28 +4,50 @@ const search = document.querySelector('#searchData');
 const table_rows = document.querySelectorAll('.content-table tbody tr');
 const table_headings = document.querySelectorAll('.content-table thead tr th');
 
-// Searching for specific data of HTML table
-search.addEventListener('input', searchTable);
+    // Initialize start and end variables at a higher scope
+    let start = 0;
+    let end = table_rows.length;
 
-function searchTable() {
-    const search_data = search.value.toLowerCase();
-    
-    table_rows.forEach((row, i) => {
-        let cells = row.querySelectorAll('td');
-        let rowMatches = Array.from(cells).some(cell => cell.textContent.toLowerCase().includes(search_data));
+    // Searching for specific data of HTML table
+    search.addEventListener('input', searchTable);
 
-        if (rowMatches) {
-            row.classList.remove('hide');
-        } else {
-            row.classList.add('hide');
-        }
-        row.style.setProperty('--delay', i / 25 + 's');
-    });
+    function searchTable() {
+        const search_data = search.value.toLowerCase();
+        console.log('Search data:', search_data);
+        
+        table_rows.forEach((row, i) => {
+            let cells = row.querySelectorAll('td');
+            let rowMatches = Array.from(cells).some(cell => cell.textContent.toLowerCase().includes(search_data));
 
-    document.querySelectorAll('.content-table tbody tr:not(.hide)').forEach((visible_row, i) => {
-        visible_row.style.backgroundColor = (i % 2 == 0) ? 'transparent' : '#0000000b';
-    });
-}
+            if (rowMatches) {
+                row.classList.remove('hide');
+            } else {
+                row.classList.add('hide');
+            }
+            row.style.setProperty('--delay', i / 25 + 's');
+        });
+
+        // Update the visibility of rows based on pagination
+        updateTableVisibility();
+    }
+
+    function updateTableVisibility() {
+        const rows = document.querySelectorAll('.content-table tbody tr');
+
+        rows.forEach((row, index) => {
+            row.style.display = ''; // Reset display property
+
+            if (index < start || index >= end) {
+                row.style.display = 'none';
+            }
+        });
+
+        // If you have alternating row colors, you may need to update them here as well
+        document.querySelectorAll('.content-table tbody tr:not([style*="display: none"])').forEach((visible_row, i) => {
+            visible_row.style.backgroundColor = (i % 2 === 0) ? 'transparent' : '#0000000b';
+        });
+    }
+
 
 
 // Sorting

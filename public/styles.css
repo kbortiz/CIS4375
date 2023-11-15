@@ -382,6 +382,11 @@ thead tr th.active,tbody td.active {
   margin: 0 auto;
 }
 
+.content-table tbody tr.filtered-out {
+  display: none;
+}
+
+
 /* Media query for small screens */
 @media (max-width: 768px) {
   .content-table tbody tr td .status.ACTIVE,
