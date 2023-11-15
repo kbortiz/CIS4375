@@ -9,7 +9,7 @@ const crypto=require('crypto');
 const axios = require('axios');
 var session = require('express-session');
 var MySQLStore = require('express-mysql-session')(session);
-const port = 3000;
+const port = 80;
 
 
 /*Mysql Express Session*/
