@@ -365,4 +365,4 @@ def update_promotion(promotion_id):
         # Handle errors, e.g., database errors
         return jsonify({'success': False, 'error': str(e)})
 
-application.run()
+#application.run()
