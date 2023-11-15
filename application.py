@@ -365,4 +365,4 @@ def update_promotion(promotion_id):
         # Handle errors, e.g., database errors
         return jsonify({'success': False, 'error': str(e)})
 
-application.run(host='0.0.0.0', port=80)
+#application.run(host='0.0.0.0', port=80)
