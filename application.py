@@ -37,7 +37,7 @@ authorizedusers = [
 def get_checkinpromo():
     conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
                              "Davi_Nails")
-    sql = "SELECT promo_name, promo_decription, promo_cost FROM promotions WHERE promo_status = 'ACTIVE'"
+    sql = "SELECT promo_name, promo_description, promo_cost FROM promotions WHERE promo_status = 'ACTIVE'"
     printlogs = execute_read_query(conn, sql)
     return jsonify(printlogs)  # Prints all logs
 
