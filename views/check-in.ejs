@@ -40,9 +40,11 @@
                 <div class="row justify-content-center">
                     <div class="col-md-6">
                         <div class="card">
-                            <div class="card-header">Current Promotion</div>
+                            <div class="card-header">Current Promotion: <%= customers[0].promo_name %></div>
                             <div class="card-body">
-                                <p><strong><%= customers[0].promo_name %></strong> </p>
+                                <p><strong>Our current promotion is <%= customers[0].promo_description %></strong> </p>
+                                <p>This promotion requires <%= customers[0].promo_cost %> Points </p>
+                                <p>Please inform an employee to redeem</p>
                             </div>
                         </div>
                     </div>
