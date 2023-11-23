@@ -21,7 +21,7 @@ app.use(session({
         host: "cis4375dbv3.cpbp75z8fnop.us-east-2.rds.amazonaws.com",
         port: 3306,
         user: "admin",
-        password: "password",
+        password: "lasagnasauce13",
         database: "Davi_Nails"
     }),
 	resave: false,
@@ -48,7 +48,7 @@ app.set("view engine", "ejs");
 var connection = mysql.createConnection({
     host: "cis4375dbv3.cpbp75z8fnop.us-east-2.rds.amazonaws.com",
     user: "admin",
-    password: "password",
+    password: "lasagnasauce13",
     database: "Davi_Nails",
     multipleStatements: true
   });
