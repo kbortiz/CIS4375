@@ -10,7 +10,7 @@ import datetime
 from datetime import date, datetime
 
 # creating connection to mysql database
-conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password", "Davi_Nails")
+conn = create_connection("cis4375dbv3.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "lasagnasauce13", "Davi_Nails")
 
 # setting up an application name
 application = flask.Flask(__name__)  # sets up the application
@@ -23,7 +23,7 @@ authorizedusers = [
     {  # Creates user with username admin and password cars2000
         # admin user
         'username': 'admin',
-        'password': 'password',
+        'password': 'lasagnasauce13',
         'role': 'admin',
         'token': '1234657890',
         'admininfo': 'something super secret nobody can know'
@@ -35,7 +35,7 @@ authorizedusers = [
 @application.route('/checkinpromo', methods=['GET'])  # Endpoint to return all customers
 @cross_origin(supports_credentials=True)
 def get_checkinpromo():
-    conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
+    conn = create_connection("cis4375dbv3.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "lasagnasauce13",
                              "Davi_Nails")
     sql = "SELECT promo_name, promo_description, promo_cost FROM promotions WHERE promo_status = 'ACTIVE'"
     printlogs = execute_read_query(conn, sql)
@@ -44,7 +44,7 @@ def get_checkinpromo():
 @application.route('/check_customer', methods=['POST'])
 def check_customer():
 
-    conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
+    conn = create_connection("cis4375dbv3.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "lasagnasauce13",
                              "Davi_Nails")
     cursor = conn.cursor(dictionary=True)
     phone_number = request.form['phone_number']
@@ -82,7 +82,7 @@ def check_customer():
 @application.route('/checkedin', methods=['GET'])  # Endpoint to return all customers
 @cross_origin(supports_credentials=True)
 def get_checkedin():
-    conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
+    conn = create_connection("cis4375dbv3.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "lasagnasauce13",
                              "Davi_Nails")
     sql = "SELECT ci.cust_id, ci.last_name, ci.first_name, cpo.current_points, chk.checkin_id \
             FROM customer_information AS ci inner join customer_points AS cpo ON ci.cust_id = cpo.cust_id \
@@ -95,7 +95,7 @@ def get_checkedin():
 @application.route('/newcheckin', methods=['GET'])  # Endpoint to return all customers
 @cross_origin(supports_credentials=True)
 def get_newcheckin():
-    conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
+    conn = create_connection("cis4375dbv3.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "lasagnasauce13",
                              "Davi_Nails")
     sql = "select cust_id from customer_information ORDER BY cust_id DESC LIMIT 1;"
     printlogs = execute_read_query(conn, sql)
@@ -105,7 +105,7 @@ def get_newcheckin():
 
 @application.route('/addcustomer', methods=['POST'])  # endpoint to submit a review
 def post_add_customer():
-    conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
+    conn = create_connection("cis4375dbv3.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "lasagnasauce13",
                              "Davi_Nails")
 
     cursor = conn.cursor()
@@ -143,7 +143,7 @@ def post_add_customer():
 
 @application.route('/customers', methods=['GET'])  # Endpoint to return all customers
 def api_get_customers():
-    conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
+    conn = create_connection("cis4375dbv3.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "lasagnasauce13",
                              "Davi_Nails")
     sql = "SELECT * FROM customer_information ORDER BY cust_ID"
     printlogs = execute_read_query(conn, sql)
@@ -154,7 +154,7 @@ def api_get_customers():
 def api_get_customercount():
         
     try:
-        conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
+        conn = create_connection("cis4375dbv3.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "lasagnasauce13",
                              "Davi_Nails")
         cursor = conn.cursor()
 
@@ -186,7 +186,7 @@ def api_get_customercount():
 @application.route('/customerinfo', methods=['GET'])  # Endpoint to return all customers
 @cross_origin(supports_credentials=True)
 def api_get_customerinfo():
-    conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
+    conn = create_connection("cis4375dbv3.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "lasagnasauce13",
                              "Davi_Nails")
     sql = "select ci.phone_number, ci.last_name, ci.first_name, ci.email, DATE_FORMAT(ci.birthday, '%m/%d/%Y') as 'birthday' ,(select DATE_FORMAT(chk.ci_date, '%m/%d/%Y') FROM check_ins AS chk where ci.cust_id = chk.cust_id order by chk.ci_date DESC LIMIT 1) as 'lastVisit',cpo.category_id from customer_information ci inner join customer_points cpo ON ci.cust_id = cpo.cust_id order by lastVisit DESC;"
     printlogs = execute_read_query(conn, sql)
@@ -196,7 +196,7 @@ def api_get_customerinfo():
 @application.route('/customerpoints', methods=['GET'])  # Endpoint to return all customers
 @cross_origin(supports_credentials=True)
 def api_get_customerpoints():
-    conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
+    conn = create_connection("cis4375dbv3.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "lasagnasauce13",
                              "Davi_Nails")
     sql = "SELECT ci. cust_id, ci.phone_number, ci.last_name, ci.first_name, cpo.current_points, cpo.lifetime_points, cpo.category_id, (select DATE_FORMAT(chk.ci_date, '%m/%d/%Y') FROM check_ins AS chk where ci.cust_id = chk.cust_id order by chk.ci_date DESC LIMIT 1) as'ci_date'  FROM customer_information AS ci inner join customer_points AS cpo ON ci.cust_id = cpo.cust_id  order by ci_date DESC;"
     printlogs = execute_read_query(conn, sql)
@@ -206,7 +206,7 @@ def api_get_customerpoints():
 @application.route('/updatepoints/<phone_number>', methods=['POST'])
 def update_current_points(phone_number):
     try:
-        conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
+        conn = create_connection("cis4375dbv3.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "lasagnasauce13",
                              "Davi_Nails")
         new_points = request.json['newPoints']
         get_id = "SELECT cust_ID FROM customer_information WHERE phone_number = '%s'" % (phone_number)
@@ -233,7 +233,7 @@ def update_current_points(phone_number):
 
 @application.route('/allreviews', methods=['GET'])  # Endpoint to return all reviews
 def api_get_reviews():
-    conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
+    conn = create_connection("cis4375dbv3.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "lasagnasauce13",
                              "Davi_Nails")
     sql = "SELECT rev.review_id, CONCAT (ci.first_name,' ', ci.last_name) AS 'Name', DATE_FORMAT(rev.rev_date, '%M %d %Y') as rev_date , rev.rev_description, rev.rev_rating FROM customer_information AS ci inner join reviews AS rev ON ci.cust_id = rev.cust_id order by rev.review_id DESC;"
     printlogs = execute_read_query(conn, sql)
@@ -242,7 +242,7 @@ def api_get_reviews():
 
 @application.route('/deletereview/<int:review_id>', methods=['POST'])  # endpoint to delete a review
 def delete_review(review_id):
-    conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
+    conn = create_connection("cis4375dbv3.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "lasagnasauce13",
                              "Davi_Nails")
 
     del_rev = "DELETE FROM reviews WHERE review_id = '%s'" % (review_id)
@@ -251,7 +251,7 @@ def delete_review(review_id):
 
 @application.route('/activepromos', methods=['GET'])  # Endpoint to return currently active promotions
 def api_get_activepromos():
-    conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
+    conn = create_connection("cis4375dbv3.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "lasagnasauce13",
                              "Davi_Nails")
     sql = "SELECT promo_id, promo_name, promo_description, DATE_FORMAT(exp_date,'%m-%d-%Y'), promo_status, promo_cost FROM promotions WHERE promo_status = 'ACTIVE' ORDER BY promo_cost"
     printlogs = execute_read_query(conn, sql)
@@ -261,7 +261,7 @@ def api_get_activepromos():
 
 @application.route('/redemptionhistory', methods=['GET'])
 def get_redemption_history():
-    conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password", "Davi_Nails")
+    conn = create_connection("cis4375dbv3.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "lasagnasauce13", "Davi_Nails")
     sql = "SELECT ci.first_name, ci.last_name, p.promo_name, p.promo_cost,rh.redemption_id, DATE_FORMAT(rh.redemption_date, '%m/%d/%Y') as redemption_date, cpo.current_points, cpo.lifetime_points " \
         "FROM redemption_history rh " \
         "JOIN customer_information ci ON rh.cust_id = ci.cust_ID " \
@@ -273,7 +273,7 @@ def get_redemption_history():
 
 @application.route('/allpromos', methods=['GET'])  # Endpoint to return all promotions
 def api_get_allpromos():
-    conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
+    conn = create_connection("cis4375dbv3.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "lasagnasauce13",
                              "Davi_Nails")
     sql = "select promo_id, promo_name, promo_description, DATE_FORMAT(exp_date,'%m/%d/%Y') as 'exp_date', promo_status, promo_cost from promotions ORDER BY promo_cost"
     printlogs = execute_read_query(conn, sql)
@@ -282,7 +282,7 @@ def api_get_allpromos():
 
 @application.route('/addreview', methods=['POST'])  # endpoint to submit a review
 def post_create_review():
-    conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
+    conn = create_connection("cis4375dbv3.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "lasagnasauce13",
                              "Davi_Nails")
 
     cust_id = request.form['cust_id']
@@ -295,7 +295,7 @@ def post_create_review():
 
 @application.route('/addpromotion', methods=['POST'])  # endpoint to submit a promotion
 def post_create_promo():
-    conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
+    conn = create_connection("cis4375dbv3.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "lasagnasauce13",
                              "Davi_Nails")
 
     request_data = request.get_json()  # provids json inputs for the needed data to be inputted
@@ -320,7 +320,7 @@ def post_create_promo():
 
 @application.route('/deletepromotion/<int:promotion_id>', methods=['POST'])  # endpoint to submit a promotion
 def post_delete_promo(promotion_id):
-    conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
+    conn = create_connection("cis4375dbv3.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "lasagnasauce13",
                              "Davi_Nails")
 
     delete_query = "DELETE FROM promotions WHERE promo_id = '%s'" % (promotion_id)
@@ -342,7 +342,7 @@ def update_promotion(promotion_id):
         print(newstatus)
         print(updated_values)
         # Create a database connection
-        conn = create_connection("cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "password",
+        conn = create_connection("cis4375dbv3.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "lasagnasauce13",
                              "Davi_Nails")
         cursor = conn.cursor()
         update_query = "UPDATE promotions SET promo_name = %s, promo_description = %s, exp_date = %s, promo_status = %s, promo_cost = %s WHERE promo_id = %s"

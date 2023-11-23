@@ -18,7 +18,7 @@ app.use(session({
 	key: 'session_cookie_name',
 	secret: 'session_cookie_secret',
 	store: new MySQLStore({
-        host: "cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com",
+        host: "cis4375dbv3.cpbp75z8fnop.us-east-2.rds.amazonaws.com",
         port: 3306,
         user: "admin",
         password: "password",
@@ -46,7 +46,7 @@ app.set("view engine", "ejs");
 /*Mysql Connection*/
 
 var connection = mysql.createConnection({
-    host: "cis4375project.cpbp75z8fnop.us-east-2.rds.amazonaws.com",
+    host: "cis4375dbv3.cpbp75z8fnop.us-east-2.rds.amazonaws.com",
     user: "admin",
     password: "password",
     database: "Davi_Nails",
