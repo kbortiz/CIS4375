@@ -262,7 +262,7 @@ def api_get_activepromos():
 @application.route('/redemptionhistory', methods=['GET'])
 def get_redemption_history():
     conn = create_connection("cis4375dbv3.cpbp75z8fnop.us-east-2.rds.amazonaws.com", "admin", "lasagnasauce13", "Davi_Nails")
-    sql = "SELECT ci.first_name, ci.last_name,ci.phone_number p.promo_name, p.promo_cost,rh.redemption_id, DATE_FORMAT(rh.redemption_date, '%m/%d/%Y') as redemption_date, cpo.current_points, cpo.lifetime_points " \
+    sql = "SELECT ci.first_name, ci.last_name,ci.phone_number, p.promo_name, p.promo_cost,rh.redemption_id, DATE_FORMAT(rh.redemption_date, '%m/%d/%Y') as redemption_date, cpo.current_points, cpo.lifetime_points " \
         "FROM redemption_history rh " \
         "JOIN customer_information ci ON rh.cust_id = ci.cust_ID " \
         "JOIN customer_points cpo ON cpo.cust_id = ci.cust_id " \
